@@ -7,147 +7,138 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.mesh.SwipeTriStrip;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class MyGdxGame extends ApplicationAdapter{
-	OrthographicCamera cam;
+public class MyGdxGame extends ApplicationAdapter {
+	Skin skin;
+	Stage stage;
 	SpriteBatch batch;
-	Texture img;
-	SwipeHandler swipe;
-	Texture tex;
-	ShapeRenderer shapes;
-	SwipeTriStrip tris;
-	
+	//Texture img;
+
+	/* may or may not be necessary later
+	TODO make the menu better
+	Game g;
+	public StartMenu(Game g){
+		create();
+		this.g=g;
+	}
+	public StartMenu(){
+		create();
+	}
+	*/
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
 
-		//the triangle strip renderer
-		tris = new SwipeTriStrip();
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
+		//img = new Texture("badlogic.jpg");
 
-		//a swipe handler with max # of input points to be kept alive
-		swipe = new SwipeHandler(10);
+		skin = new Skin();
+		// Generate a 1x1 white texture and store it in the skin named "white".
+		Pixmap pixmap = new Pixmap(400, 100, Format.RGBA8888);
+		pixmap.setColor(Color.GREEN);
+		pixmap.fill();
+		skin.add("white", new Texture(pixmap));
 
-		//minimum distance between two points
-		swipe.minDistance = 10;
+		// Store the default libgdx font under the name "default".
+		BitmapFont bfont = new BitmapFont();
+		//bfont.scale(1);
+		skin.add("default", bfont);
 
-		//minimum distance between first and second point
-		swipe.initialDistance = 10;
+		//textbuttonstyle wont overwrite the font
+		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
-		//we will use a texture for the smooth edge, and also for stroke effects
-		tex = new Texture("gradient.png");
-		tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		textButtonStyle.font = skin.getFont("default");
 
-		shapes = new ShapeRenderer();
-		batch = new SpriteBatch();
+		skin.add("default", textButtonStyle);
 
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		// Create a button with the "default" TextButtonStyle.
+		final TextButton PlayButton = new TextButton("PLAY",textButtonStyle);
+		final TextButton ContinueButton = new TextButton("Continue",textButtonStyle);
+		final TextButton SettingsButton = new TextButton("Settings",textButtonStyle);
+		final TextButton QuitButton = new TextButton("Quit",textButtonStyle);
+		PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 + 100);
+		ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2);
+		SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 - 100);
+		QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 - 200);
+		stage.addActor(PlayButton);
+		stage.addActor(ContinueButton);
+		stage.addActor(SettingsButton);
+		stage.addActor(QuitButton);
 
-		//handle swipe input
-		Gdx.input.setInputProcessor(swipe);
+		PlayButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				PlayButton.setText("Starting new game");
+
+				//TODO change the buttons to go to the correct places
+				//g.setScreen( new GameScreen());
+			}
+		});
+		ContinueButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				//System.out.println("Clicked! Is checked: " + button.isChecked());
+				ContinueButton.setText("Continuing");
+
+				//TODO change the buttons to go to the correct places
+				//g.setScreen( new GameScreen());
+			}
+		});
+		SettingsButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				//System.out.println("Clicked! Is checked: " + button.isChecked());
+				SettingsButton.setText("Going to Settings");
+
+				//TODO change the buttons to go to the correct places
+				//g.setScreen( new GameScreen());
+			}
+		});
+		QuitButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				//System.out.println("Clicked! Is checked: " + button.isChecked());
+				QuitButton.setText("Quitting");
+
+				//TODO this is the the wrong way to exit but whatever
+				//Activity.finish();
+				System.exit(0);
+			}
+		});
+
 	}
-
 	@Override
 	public void render () {
-//		Gdx.gl.glClearColor(1, 0, 0, 1);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
-
+		//this should make the background blueish
+		Gdx.gl.glClearColor((float) .1, (float) .1, (float) .66, (float) .8);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		cam.update();
-		batch.setProjectionMatrix(cam.combined);
 
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		tex.bind();
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
 
-		//the endcap scale
-//		tris.endcap = 5f;
-
-		//the thickness of the line
-		tris.thickness = 30f;
-
-		//generate the triangle strip from our path
-		tris.update(swipe.path());
-
-		//the vertex color for tinting, i.e. for opacity
-		tris.color = Color.WHITE;
-
-		//render the triangles to the screen
-		tris.draw(cam);
-
-		//uncomment to see debug lines
-//		drawDebug();
+		batch.begin();
+		//batch.draw(img, 0, 0);
+		batch.end();
 	}
-
-
-	//optional debug drawing..
-	void drawDebug() {
-		Array<Vector2> input = swipe.input();
-
-		//draw the raw input
-		shapes.begin(ShapeRenderer.ShapeType.Line);
-		shapes.setColor(Color.GRAY);
-		for (int i=0; i<input.size-1; i++) {
-			Vector2 p = input.get(i);
-			Vector2 p2 = input.get(i+1);
-			shapes.line(p.x, p.y, p2.x, p2.y);
-		}
-		shapes.end();
-
-		//draw the smoothed and simplified path
-		shapes.begin(ShapeRenderer.ShapeType.Line);
-		shapes.setColor(Color.RED);
-		Array<Vector2> out = swipe.path();
-		for (int i=0; i<out.size-1; i++) {
-			Vector2 p = out.get(i);
-			Vector2 p2 = out.get(i+1);
-			shapes.line(p.x, p.y, p2.x, p2.y);
-		}
-		shapes.end();
-
-
-		//render our perpendiculars
-		shapes.begin(ShapeRenderer.ShapeType.Line);
-		Vector2 perp = new Vector2();
-
-		for (int i=1; i<input.size-1; i++) {
-			Vector2 p = input.get(i);
-			Vector2 p2 = input.get(i+1);
-
-			shapes.setColor(Color.LIGHT_GRAY);
-			perp.set(p).sub(p2).nor();
-			perp.set(perp.y, -perp.x);
-			perp.scl(10f);
-			shapes.line(p.x, p.y, p.x+perp.x, p.y+perp.y);
-			perp.scl(-1f);
-			shapes.setColor(Color.BLUE);
-			shapes.line(p.x, p.y, p.x+perp.x, p.y+perp.y);
-		}
-		shapes.end();
-	}
-
 	@Override
-	public void pause() {
-
+	public void resize (int width, int height) {
 	}
-
 	@Override
-	public void resume() {
-
+	public void dispose () {
+		stage.dispose();
+		skin.dispose();
 	}
 
-	@Override
-	public void dispose() {
-		batch.dispose();
-		shapes.dispose();
-		tex.dispose();
-	}
 }
