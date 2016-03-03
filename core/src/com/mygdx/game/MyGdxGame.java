@@ -9,12 +9,18 @@ import com.badlogic.gdx.Game;
 public class MyGdxGame extends Game {
 
 	public StartMenuScreen startmenuscreen;
+	public IntroScreen introscreen;
+	public MapScreen mapscreen;
 	public SwipeGame swipegame;
+	public GameScreen gamescreen;
 
 	@Override
 	public void create () {
 
+		introscreen = new IntroScreen(this);
+		mapscreen = new MapScreen(this);
 		swipegame = new SwipeGame(this);
+		gamescreen = new GameScreen(this);
 		startmenuscreen = new StartMenuScreen(this);
 		setScreen(startmenuscreen);
 
