@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.mesh.SwipeTriStrip;
 
-public class SwipeGame extends ApplicationAdapter{
+//implements screen instead of applicationadapter
+public class SwipeGame implements Screen {
     OrthographicCamera cam;
     SpriteBatch batch;
     Texture img;
@@ -21,8 +24,14 @@ public class SwipeGame extends ApplicationAdapter{
     ShapeRenderer shapes;
     SwipeTriStrip tris;
 
+    //probably wont be neccassary for the actual game
+    final MyGdxGame game;
+    public SwipeGame(final MyGdxGame game) {
+        this.game = game;
+    }
+
     @Override
-    public void create () {
+    public void show () {
         batch = new SpriteBatch();
 //        img = new Texture("badlogic.jpg");
 
@@ -53,7 +62,7 @@ public class SwipeGame extends ApplicationAdapter{
     }
 
     @Override
-    public void render () {
+    public void render (float delta) {
 //		Gdx.gl.glClearColor(1, 0, 0, 1);
 //		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //		batch.begin();
@@ -153,6 +162,10 @@ public class SwipeGame extends ApplicationAdapter{
 
     @Override
     public void resize (int width, int height) {
+    }
+
+    @Override
+    public void hide() {
     }
 
 }
