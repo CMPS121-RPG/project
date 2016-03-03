@@ -94,6 +94,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 				//TODO change the buttons to go to the correct places
 				//g.setScreen( new GameScreen());
+				//
 			}
 		});
 		ContinueButton.addListener(new ChangeListener() {
