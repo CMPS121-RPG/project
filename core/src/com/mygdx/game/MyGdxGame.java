@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+
 
 public class MyGdxGame extends ApplicationAdapter {
 	Skin skin;
@@ -51,10 +54,15 @@ public class MyGdxGame extends ApplicationAdapter {
 		pixmap.fill();
 		skin.add("white", new Texture(pixmap));
 
-		// Store the default libgdx font under the name "default".
-		BitmapFont bfont = new BitmapFont();
-		//bfont.scale(1);
-		skin.add("default", bfont);
+		//create the custom font
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/slkscre.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 20;
+		BitmapFont OurFont = generator.generateFont(parameter);
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+		// add ourfont to the skin for our buttons.
+		skin.add("default", OurFont);
 
 		//textbuttonstyle wont overwrite the font
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -62,7 +70,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
 		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
 		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-
 		textButtonStyle.font = skin.getFont("default");
 
 		skin.add("default", textButtonStyle);
