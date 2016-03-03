@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -25,7 +27,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	Skin skin;
 	Stage stage;
 	SpriteBatch batch;
-	//Texture img;
+	Texture img;
+	Sprite sprite;
 
 	/* may or may not be necessary later
 	TODO make the menu better
@@ -45,11 +48,19 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-		//img = new Texture("badlogic.jpg");
+		//Straight up stolen from https://www.pinterest.com/pin/428193877042769820/
+		//change this if we ever put this game on the playstore
+		img = new Texture("menubackground1.png");
+		img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		//change these numbers around so it looks good on the presentation phone
+		TextureRegion region = new TextureRegion(img, 0, 0, 600, 400);
+		sprite = new Sprite(region);
+		sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		sprite.setOrigin(0, 0);
 
 		skin = new Skin();
 		// Generate a 1x1 white texture and store it in the skin named "white".
-		Pixmap pixmap = new Pixmap(400, 100, Format.RGBA8888);
+		Pixmap pixmap = new Pixmap(320, 75, Format.RGBA8888);
 		pixmap.setColor(Color.GREEN);
 		pixmap.fill();
 		skin.add("white", new Texture(pixmap));
@@ -77,12 +88,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		// Create a button with the "default" TextButtonStyle.
 		final TextButton PlayButton = new TextButton("PLAY",textButtonStyle);
 		final TextButton ContinueButton = new TextButton("Continue",textButtonStyle);
-		final TextButton SettingsButton = new TextButton("Settings",textButtonStyle);
+		final TextButton SettingsButton = new TextButton("Mute",textButtonStyle);
 		final TextButton QuitButton = new TextButton("Quit",textButtonStyle);
-		PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 + 100);
-		ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2);
-		SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 - 100);
-		QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/2 - 200);
+		PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2);
+		ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
+		SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 165);
+		QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 245);
 		stage.addActor(PlayButton);
 		stage.addActor(ContinueButton);
 		stage.addActor(SettingsButton);
@@ -109,23 +120,20 @@ public class MyGdxGame extends ApplicationAdapter {
 		SettingsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				//System.out.println("Clicked! Is checked: " + button.isChecked());
-				SettingsButton.setText("Going to Settings");
+				SettingsButton.setText("Muting");
 
 				//TODO change the buttons to go to the correct places
 				//g.setScreen( new GameScreen());
 			}
+
 		});
 		QuitButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				//System.out.println("Clicked! Is checked: " + button.isChecked());
 				QuitButton.setText("Quitting");
-
-				//TODO this is the the wrong way to exit but whatever
-				//Activity.finish();
+				//this is the the wrong way to exit but whatever
 				System.exit(0);
 			}
 		});
-
 	}
 	@Override
 	public void render () {
@@ -133,12 +141,15 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor((float) .1, (float) .1, (float) .66, (float) .8);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		//this draws the background image
+		batch.begin();
+		sprite.draw(batch);
+		batch.end();
+
+		//draws the buttons
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 
-		batch.begin();
-		//batch.draw(img, 0, 0);
-		batch.end();
 	}
 	@Override
 	public void resize (int width, int height) {
