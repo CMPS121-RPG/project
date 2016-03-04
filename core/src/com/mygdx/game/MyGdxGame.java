@@ -17,8 +17,8 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 
-		introscreen = new IntroScreen(this);
-		mapscreen = new MapScreen(this);
+		//introscreen = new IntroScreen(this);
+		//mapscreen = new MapScreen(this);
 		swipegame = new SwipeGame(this);
 		gamescreen = new GameScreen(this);
 		startmenuscreen = new StartMenuScreen(this);

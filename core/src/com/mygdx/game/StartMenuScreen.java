@@ -109,9 +109,9 @@ public class StartMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 PlayButton.setText("Starting new game");
 
-                //TODO change the buttons to go to the correct places
+                //TODO make this go to the introscreen or map screen
                 //this goes to the swipe thing
-                game.setScreen(game.swipegame);
+                game.setScreen(game.gamescreen);
 
             }
         });
@@ -120,8 +120,8 @@ public class StartMenuScreen implements Screen {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
                 ContinueButton.setText("Continuing");
 
-                //TODO change the buttons to go to the correct places
-                //game.setScreen(game.whateverscreen);
+                //TODO i dont think we need this button because we dont save anything
+                //game.setScreen(game.swipegame);
             }
         });
         SettingsButton.addListener(new ChangeListener() {
@@ -129,7 +129,7 @@ public class StartMenuScreen implements Screen {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
                 SettingsButton.setText("Muting");
 
-                //TODO change the buttons to go to the correct places
+                //TODO make this mute and unmute the non existant sound
                 //mute and unmute;
             }
 
@@ -137,7 +137,7 @@ public class StartMenuScreen implements Screen {
         QuitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 QuitButton.setText("Quitting");
-                //this is the the wrong way to exit but whatever
+                //TODO make this quit the correct way
                 System.exit(0);
             }
         });
