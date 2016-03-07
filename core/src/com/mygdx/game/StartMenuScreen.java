@@ -93,15 +93,15 @@ public class StartMenuScreen implements Screen {
 
         // Create a button with the "default" TextButtonStyle.
         final TextButton PlayButton = new TextButton("PLAY",textButtonStyle);
-        final TextButton ContinueButton = new TextButton("Continue",textButtonStyle);
+        //final TextButton ContinueButton = new TextButton("Continue",textButtonStyle);
         final TextButton SettingsButton = new TextButton("Mute",textButtonStyle);
         final TextButton QuitButton = new TextButton("Quit",textButtonStyle);
-        PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2);
-        ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
+        PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
+        //ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
         SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 165);
         QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 245);
         stage.addActor(PlayButton);
-        stage.addActor(ContinueButton);
+        //stage.addActor(ContinueButton);
         stage.addActor(SettingsButton);
         stage.addActor(QuitButton);
 
@@ -109,19 +109,9 @@ public class StartMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 PlayButton.setText("Starting new game");
 
-                //TODO make this go to the introscreen or map screen
                 //this goes to the swipe thing
-                game.setScreen(game.gamescreen);
+                game.setScreen(game.introscreen);
 
-            }
-        });
-        ContinueButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                ContinueButton.setText("Continuing");
-
-                //TODO i dont think we need this button because we dont save anything
-                //game.setScreen(game.swipegame);
             }
         });
         SettingsButton.addListener(new ChangeListener() {
