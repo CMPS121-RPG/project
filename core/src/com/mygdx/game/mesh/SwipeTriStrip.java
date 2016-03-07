@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.MyGdxGame;
 
 public class SwipeTriStrip {
 
@@ -17,14 +18,31 @@ public class SwipeTriStrip {
 	public float endcap = 8.5f;
 	public Color color = new Color(Color.WHITE);
 	ImmediateModeRenderer20 gl20;
+	float alpha = 1;
+	double previousTime = 0;
+	double alphaDecayRate = 0.0009;
 	
 	public SwipeTriStrip() {
 		gl20 = new ImmediateModeRenderer20(false, true, 1);
+		previousTime = System.currentTimeMillis();
 	}
 	
-	public void draw(Camera cam) {
+	public void draw(Camera cam, boolean isDown) {
 		if (tristrip.size<=0)
 			return;
+
+//		System.out.println(tristrip);
+
+		if (!isDown && alpha > 0) {
+			double curTime = System.currentTimeMillis();
+			double timeElapsed = curTime - previousTime;
+			alpha -= timeElapsed * alphaDecayRate;
+			if (alpha < 0) {
+				alpha = 0;
+			}
+//			System.out.println(alpha + " : " + timeElapsed);
+			previousTime = curTime;
+		}
 
 		gl20.begin(cam.combined, GL20.GL_TRIANGLE_STRIP);
 		for (int i=0; i<tristrip.size; i++) {
@@ -34,13 +52,18 @@ public class SwipeTriStrip {
 			}	
 			Vector2 point = tristrip.get(i);
 			Vector2 tc = texcoord.get(i);
-			gl20.color(color.r, color.g, color.b, color.a);
+//			gl20.color(color.r, color.g, color.b, color.a);
+			gl20.color(color.r, color.g, color.b, alpha);
 			gl20.texCoord(tc.x, 0f);
 			gl20.vertex(point.x, point.y, 0f);
 		}
 		gl20.end();
 	}
-	
+
+	public void resetAlpha() {
+		alpha = 1;
+	}
+
 	private int generate(Array<Vector2> input, int mult) {
 		int c = tristrip.size;
 		if (endcap<=0) {

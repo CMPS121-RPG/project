@@ -26,11 +26,13 @@ public class SwipeHandler extends InputAdapter {
 	
 	private SwipeResolver simplifier = new ResolverRadialChaikin();
 	private Array<Vector2> simplified;
+	private SwipeGame sg;
 	
-	public SwipeHandler(int maxInputPoints) {
+	public SwipeHandler(int maxInputPoints, SwipeGame _sg) {
 		this.inputPoints = new FixedList<Vector2>(maxInputPoints, Vector2.class);
 		simplified = new Array<Vector2>(true, maxInputPoints, Vector2.class);
 		resolve(); //copy initial empty list
+		this.sg = _sg;
 	}
 
 	/**
@@ -67,6 +69,7 @@ public class SwipeHandler extends InputAdapter {
 		//starting point
 		lastPoint = new Vector2(screenX, Gdx.graphics.getHeight()-screenY);
 		inputPoints.insert(lastPoint);
+		sg.touch(true);
 		
 		resolve();
 		return true;
@@ -76,6 +79,7 @@ public class SwipeHandler extends InputAdapter {
 		//on release, the line is simplified
 		resolve();
 		isDrawing = false;
+		sg.touch(false);
 		return false;
 	}
 	
