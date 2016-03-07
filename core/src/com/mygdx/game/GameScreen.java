@@ -41,20 +41,36 @@ public class GameScreen implements Screen{
     Skin skin;
     Stage stage;
     SpriteBatch batch;
-    Texture backgroundimg, partymember1img;
+    Texture backgroundimg, partymember1img, greenslime;
     Sprite sprite;
     BitmapFont OurFont;
     CharSequence currentpartymember = "warrior";
     private TextureRegion[]     partymembersregion = new TextureRegion[4];
     int partymemberturn;
+    TextButton attack1button;
+    TextButton attack2button;
+    TextButton attack3button;
+    //get this from the map screen
+    int numberofenemies = 3;
+    int enemyhealth1, enemyhealth2, enemyhealth3;
 
     final MyGdxGame game;
     public GameScreen(final MyGdxGame game) {
         this.game = game;
     }
 
+    //create the party members
+    final WarriorClass SwordBro = new WarriorClass();
+    int warriorhealth = SwordBro.basehealth;
+    final ArcherClass Hippie = new ArcherClass();
+    int archerhealth = Hippie.basehealth;
+    final MageClass Avatar = new MageClass();
+    int magehealth = Avatar.basehealth;
+
+
     @Override
     public void show () {
+
         batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -74,11 +90,12 @@ public class GameScreen implements Screen{
         partymembersregion[0] = new TextureRegion(partymember1texture, 0, 0, 56, 56);
         partymembersregion[1] = new TextureRegion(partymember1texture, 56, 0, 56, 56);
         partymembersregion[2] = new TextureRegion(partymember1texture, 112, 0, 56, 56);
-        partymembersregion[3] = new TextureRegion(partymember1texture, 168, 0, 56, 56);
+
+        greenslime = new Texture("GreenSlime.png");
 
         skin = new Skin();
         // Generate a 1x1 white texture and store it in the skin named "white".
-        Pixmap pixmap = new Pixmap(200, 100, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth()/4, 100, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
@@ -95,21 +112,21 @@ public class GameScreen implements Screen{
         //textbuttonstyle wont overwrite the font
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        //textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        //textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        //textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
 
         // Create a button with the "default" TextButtonStyle.
-        final TextButton attack1button = new TextButton("attack1",textButtonStyle);
-        final TextButton attack2button = new TextButton("attack2",textButtonStyle);
-        final TextButton attack3button = new TextButton("attack3",textButtonStyle);
+        attack1button = new TextButton("attack1",textButtonStyle);
+        attack2button = new TextButton("attack2",textButtonStyle);
+        attack3button = new TextButton("attack3",textButtonStyle);
         final TextButton pausebutton = new TextButton("pause",textButtonStyle);
         attack1button.setPosition(0, 0);
-        attack2button.setPosition(200, 0);
-        attack3button.setPosition(400, 0);
-        pausebutton.setPosition(Gdx.graphics.getWidth() - 200, 0);
+        attack2button.setPosition(Gdx.graphics.getWidth()/4, 0);
+        attack3button.setPosition(Gdx.graphics.getWidth()/2, 0);
+        pausebutton.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/4, 0);
         stage.addActor(attack1button);
         stage.addActor(attack2button);
         stage.addActor(attack3button);
@@ -118,30 +135,70 @@ public class GameScreen implements Screen{
         //set the buttons texts to be different according to the different classes turns
         attack1button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                attack1button.setText("Attacking");
-                //TODO
-                //game.setScreen(game.swipegame);
+                warriorhealth = warriorhealth - 10;
+                if(partymemberturn == 0){
+                    //TODO go to warrior 1 attack
+                }
+                if(partymemberturn == 1){
+                    //TODO go to archer 1 attack
+                }
+                if(partymemberturn == 2){
+                    //TODO go to mage 1 attack
+                }
+                if(checkifwin() == true){
+                    //TODO go back to the map
+                }
+                //defend thing
+                if(checkiflose() == true){
+                    //TODO go to lose screen
+                    game.setScreen(game.startmenuscreen);
+                }
                 switchpartymember();
-
             }
         });
         attack2button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                attack2button.setText("Attacking");
-
-                //TODO
-                //game.setScreen(game.swipegame);
+                archerhealth = archerhealth - 10;
+                if(partymemberturn == 0){
+                    //TODO go to warrior 2 attack
+                }
+                if(partymemberturn == 1){
+                    //TODO go to archer 2 attack
+                }
+                if(partymemberturn == 2){
+                    //TODO go to mage 2 attack
+                }
+                if(checkifwin() == true){
+                    //TODO go back to the map
+                }
+                //defend thing
+                if(checkiflose() == true){
+                    //TODO go to lose screen
+                    game.setScreen(game.startmenuscreen);
+                }
                 switchpartymember();
             }
         });
         attack3button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                attack3button.setText("Attacking");
-
-                //TODO
-                //game.setScreen(game.swipegame);
+                magehealth = magehealth - 10;
+                if(partymemberturn == 0){
+                    //TODO go to warrior 3 attack
+                }
+                if(partymemberturn == 1){
+                    //TODO go to archer 3 attack
+                }
+                if(partymemberturn == 2){
+                    //TODO go to mage 3 attack
+                }
+                if(checkifwin() == true){
+                    //TODO go back to the map
+                }
+                //defend thing
+                if(checkiflose() == true){
+                    //TODO go to lose screen
+                    game.setScreen(game.startmenuscreen);
+                }
                 switchpartymember();
             }
 
@@ -165,31 +222,49 @@ public class GameScreen implements Screen{
         //draws the background
         sprite.draw(batch);
         //draws the temp sprites        //x,y , zoomed x,y
-        int x1, x2, x3, x4;
+        int x1, x2, x3;
         x1 = 50;
         x2 = 50;
         x3 = 50;
-        x4 = 50;
         if(partymemberturn == 0) {
-            x1 = (Gdx.graphics.getWidth()/2 - 56) ;
+            x1 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Warrior " + warriorhealth;
+            attack1button.setText("Heroic Strike");
+            attack2button.setText("Onslut");
+            attack3button.setText("Armor Breaker");
         }
         if(partymemberturn == 1){
-            x2 = (Gdx.graphics.getWidth()/2 - 56) ;
+            x2 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Archer " + archerhealth;
+            attack1button.setText("Steady Shot");
+            attack2button.setText("Hail of Arrows");
+            attack3button.setText("Aimed Shot");
         }
         if(partymemberturn == 2) {
-            x3 = (Gdx.graphics.getWidth()/2 - 56) ;
+            x3 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Avatar " + magehealth;
+            attack1button.setText("Fire");
+            attack2button.setText("Earth");
+            attack3button.setText("Water");
         }
-        if(partymemberturn == 3){
-            x4 = (Gdx.graphics.getWidth()/2 - 56) ;
+
+        if(warriorhealth > 0) {
+            batch.draw(partymembersregion[0], x1, 100, 112, 112);
         }
-        batch.draw(partymembersregion[0], x1, 100, 112, 112);
-        batch.draw(partymembersregion[1], x2, 200, 112, 112);
-        batch.draw(partymembersregion[2], x3, 300, 112, 112);
-        batch.draw(partymembersregion[3], x4, 400, 112, 112);
+        if(archerhealth > 0) {
+            batch.draw(partymembersregion[1], x2, 200, 112, 112);
+        }
+        if(magehealth > 0) {
+            batch.draw(partymembersregion[2], x3, 300, 112, 112);
+        }
+
+        for(int i = 0; i < numberofenemies; i++) {
+            batch.draw(greenslime, Gdx.graphics.getWidth() - 100, (100*i) + 150, 64, 64);
+        }
 
         //display who's turn it is
         OurFont.setColor(1, 1, 1, 1);
-        OurFont.draw(batch, currentpartymember , Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 50);
+        OurFont.draw(batch, currentpartymember , 20, Gdx.graphics.getHeight() - 30);
 
         batch.end();
 
@@ -198,28 +273,6 @@ public class GameScreen implements Screen{
         stage.draw();
     }
 
-    public void switchpartymember(){
-        if(partymemberturn == 0){
-            partymemberturn = 1;
-            currentpartymember = "warrior";
-            return;
-        }
-        if(partymemberturn == 1){
-            partymemberturn = 2;
-            currentpartymember = "mage";
-            return;
-        }
-        if(partymemberturn == 2){
-            partymemberturn = 3;
-            currentpartymember = "archer";
-            return;
-        }
-        if(partymemberturn == 3){
-            partymemberturn = 0;
-            currentpartymember = "bardmonk";
-            return;
-        }
-    }
     @Override
     public void resize (int width, int height) {
     }
@@ -236,5 +289,59 @@ public class GameScreen implements Screen{
     public void dispose () {
         stage.dispose();
         skin.dispose();
+    }
+    public void switchpartymember(){
+        if(partymemberturn == 0){
+            if(archerhealth >= 0) {
+                partymemberturn = 1;
+                return;
+            }
+            if(magehealth >= 0) {
+                partymemberturn = 2;
+                return;
+            }
+        }
+        if(partymemberturn == 1){
+            if(magehealth >= 0) {
+                partymemberturn = 2;
+                return;
+            }
+            if(warriorhealth >= 0){
+                partymemberturn = 0;
+                return;
+            }
+        }
+        if(partymemberturn == 2){
+            if(warriorhealth >= 0) {
+                partymemberturn = 0;
+                return;
+            }
+            if(archerhealth >= 0){
+                partymemberturn = 1;
+                return;
+            }
+        }
+    }
+
+    public boolean checkiflose(){
+        Boolean lose;
+        if(warriorhealth <= 0 && archerhealth <= 0 && magehealth <= 0){
+            lose = true;
+            return lose;
+        }else{
+            lose = false;
+            return lose;
+        }
+    }
+
+    public boolean checkifwin(){
+        Boolean win;
+        if(enemyhealth1 <= 0 && enemyhealth2 <= 0 && enemyhealth3 <= 0){
+            win = true;
+            return win;
+        }else{
+            win = false;
+            return win;
+        }
     }
 }
