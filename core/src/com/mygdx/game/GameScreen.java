@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -17,9 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
-import java.awt.Label;
-import java.awt.TextField;
 
 /*
 The main gameScreen
@@ -53,6 +49,7 @@ public class GameScreen implements Screen{
     //get this from the map screen
     int numberofenemies = 3;
     int enemyhealth1, enemyhealth2, enemyhealth3;
+    int x1, x2, x3;
 
     final MyGdxGame game;
     public GameScreen(final MyGdxGame game) {
@@ -66,6 +63,13 @@ public class GameScreen implements Screen{
     int archerhealth = Hippie.basehealth;
     final MageClass Avatar = new MageClass();
     int magehealth = Avatar.basehealth;
+
+    final SmallMonster slime1 = new SmallMonster();
+    int slime1health = slime1.basehealth;
+    final SmallMonster slime2 = new SmallMonster();
+    int slime2health = slime2.basehealth;
+    final SmallMonster slime3 = new SmallMonster();
+    int slime3health = slime3.basehealth;
 
 
     @Override
@@ -222,32 +226,8 @@ public class GameScreen implements Screen{
         //draws the background
         sprite.draw(batch);
         //draws the temp sprites        //x,y , zoomed x,y
-        int x1, x2, x3;
-        x1 = 50;
-        x2 = 50;
-        x3 = 50;
-        if(partymemberturn == 0) {
-            x1 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Warrior " + warriorhealth;
-            attack1button.setText("Heroic Strike");
-            attack2button.setText("Onslut");
-            attack3button.setText("Armor Breaker");
-        }
-        if(partymemberturn == 1){
-            x2 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Archer " + archerhealth;
-            attack1button.setText("Steady Shot");
-            attack2button.setText("Hail of Arrows");
-            attack3button.setText("Aimed Shot");
-        }
-        if(partymemberturn == 2) {
-            x3 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Avatar " + magehealth;
-            attack1button.setText("Fire");
-            attack2button.setText("Earth");
-            attack3button.setText("Water");
-        }
 
+        placepartymembers();
         if(warriorhealth > 0) {
             batch.draw(partymembersregion[0], x1, 100, 112, 112);
         }
@@ -292,31 +272,31 @@ public class GameScreen implements Screen{
     }
     public void switchpartymember(){
         if(partymemberturn == 0){
-            if(archerhealth >= 0) {
+            if(archerhealth > 0) {
                 partymemberturn = 1;
                 return;
             }
-            if(magehealth >= 0) {
+            if(magehealth > 0) {
                 partymemberturn = 2;
                 return;
             }
         }
         if(partymemberturn == 1){
-            if(magehealth >= 0) {
+            if(magehealth > 0) {
                 partymemberturn = 2;
                 return;
             }
-            if(warriorhealth >= 0){
+            if(warriorhealth > 0){
                 partymemberturn = 0;
                 return;
             }
         }
         if(partymemberturn == 2){
-            if(warriorhealth >= 0) {
+            if(warriorhealth > 0) {
                 partymemberturn = 0;
                 return;
             }
-            if(archerhealth >= 0){
+            if(archerhealth > 0){
                 partymemberturn = 1;
                 return;
             }
@@ -343,5 +323,32 @@ public class GameScreen implements Screen{
             win = false;
             return win;
         }
+    }
+    public void placepartymembers(){
+        x1 = 50;
+        x2 = 50;
+        x3 = 50;
+        if(partymemberturn == 0) {
+            x1 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Warrior " + warriorhealth + "/100";
+            attack1button.setText("Heroic Strike");
+            attack2button.setText("Onslut");
+            attack3button.setText("Armor Breaker");
+        }
+        if(partymemberturn == 1){
+            x2 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Archer " + archerhealth + "/75";
+            attack1button.setText("Steady Shot");
+            attack2button.setText("Hail of Arrows");
+            attack3button.setText("Aimed Shot");
+        }
+        if(partymemberturn == 2) {
+            x3 = (Gdx.graphics.getWidth()/2 - 280);
+            currentpartymember = "Avatar " + magehealth + "/50";
+            attack1button.setText("Fire");
+            attack2button.setText("Earth");
+            attack3button.setText("Water");
+        }
+
     }
 }
