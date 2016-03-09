@@ -20,7 +20,7 @@ public class SwipeTriStrip {
 	ImmediateModeRenderer20 gl20;
 	float alpha = 1;
 	double previousTime = 0;
-	double alphaDecayRate = 0.0009;
+	double alphaDecayRate = 0.004;
 	
 	public SwipeTriStrip() {
 		gl20 = new ImmediateModeRenderer20(false, true, 1);
@@ -28,21 +28,27 @@ public class SwipeTriStrip {
 	}
 	
 	public void draw(Camera cam, boolean isDown) {
+
 		if (tristrip.size<=0)
 			return;
 
 //		System.out.println(tristrip);
 
+		double curTime = System.currentTimeMillis();
+
 		if (!isDown && alpha > 0) {
-			double curTime = System.currentTimeMillis();
 			double timeElapsed = curTime - previousTime;
 			alpha -= timeElapsed * alphaDecayRate;
 			if (alpha < 0) {
 				alpha = 0;
 			}
 //			System.out.println(alpha + " : " + timeElapsed);
-			previousTime = curTime;
+
 		}
+
+		previousTime = curTime;
+
+//		System.out.println(alpha);
 
 		gl20.begin(cam.combined, GL20.GL_TRIANGLE_STRIP);
 		for (int i=0; i<tristrip.size; i++) {

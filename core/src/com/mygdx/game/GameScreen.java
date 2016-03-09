@@ -138,12 +138,18 @@ public class GameScreen implements Screen{
                 warriorhealth = warriorhealth - 10;
                 if(partymemberturn == 0){
                     //TODO go to warrior 1 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
                     //TODO go to archer 1 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER1);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
                     //TODO go to mage 1 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE1);
+                    game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
@@ -161,12 +167,18 @@ public class GameScreen implements Screen{
                 archerhealth = archerhealth - 10;
                 if(partymemberturn == 0){
                     //TODO go to warrior 2 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR2);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
                     //TODO go to archer 2 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER2);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
                     //TODO go to mage 2 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE2);
+                    game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
@@ -184,12 +196,18 @@ public class GameScreen implements Screen{
                 magehealth = magehealth - 10;
                 if(partymemberturn == 0){
                     //TODO go to warrior 3 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR3);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
                     //TODO go to archer 3 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER3);
+                    game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
                     //TODO go to mage 3 attack
+                    game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE3);
+                    game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
@@ -207,6 +225,7 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 //TODO make this pause the game
                 pausebutton.setText("pausing");
+                game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
                 game.setScreen(game.swipegame);
             }
         });
@@ -230,7 +249,7 @@ public class GameScreen implements Screen{
             x1 = (Gdx.graphics.getWidth()/2 - 280);
             currentpartymember = "Warrior " + warriorhealth;
             attack1button.setText("Heroic Strike");
-            attack2button.setText("Onslut");
+            attack2button.setText("Onslaught");
             attack3button.setText("Armor Breaker");
         }
         if(partymemberturn == 1){

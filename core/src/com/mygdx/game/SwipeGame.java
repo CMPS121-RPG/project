@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -14,7 +12,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.mesh.SwipeTriStrip;
-import com.sun.org.apache.xerces.internal.util.ShadowedSymbolTable;
+
+import java.awt.SystemTray;
 
 //implements screen instead of applicationadapter
 public class SwipeGame implements Screen {
@@ -27,10 +26,11 @@ public class SwipeGame implements Screen {
     SwipeTriStrip tris;
     boolean isDown = false;
     boolean goodDraw = false;
-    Array<Vector2> guide = new Array<Vector2>();
+    Array<Array<Vector2>> guides = new Array<Array<Vector2>>();
     double maxDist = 200;
     private BitmapFont font;
     String displayText = "";
+    boolean goodSwipes[] = new boolean[0];
 
     //probably wont be neccassary for the actual game
     final MyGdxGame game;
@@ -47,7 +47,7 @@ public class SwipeGame implements Screen {
         tris = new SwipeTriStrip();
 
         //a swipe handler with max # of input points to be kept alive
-        swipe = new SwipeHandler(10, this);
+        swipe = new SwipeHandler(100, this);
 
         //minimum distance between two points
         swipe.minDistance = 10;
@@ -68,9 +68,9 @@ public class SwipeGame implements Screen {
         //handle swipe input
         Gdx.input.setInputProcessor(swipe);
 
-        for (int i = 0; i < 10; i++) {
-            guide.add(new Vector2(400 + i * 100, 100 + i * 100));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            guides.add(new Vector2(400 + i * 100, 100 + i * 100));
+//        }
         font = new BitmapFont();
         font.setColor(Color.RED);
     }
@@ -118,6 +118,210 @@ public class SwipeGame implements Screen {
         batch.end();
     }
 
+    class Point {
+        double x;
+        double y;
+        public Point(double _x, double _y) {
+            x = _x;
+            y = _y;
+        }
+    }
+
+    Array<Array<Vector2>> makeGuides(Point[]... pointArrays) {
+        Array<Array<Vector2>> output = new Array<Array<Vector2>>();
+        for(Point[] points : pointArrays) {
+            Array<Vector2> row = new Array<Vector2>();
+            for (Point point : points) {
+                row.add(loc(point));
+            }
+            output.add(row);
+        }
+        return output;
+    }
+
+    Vector2 loc(double _widthPercent, double _heightPercent) {
+        float widthPercent = (float) _widthPercent;
+        float heightPercent = (float) _heightPercent;
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+        return new Vector2(width * widthPercent, height * heightPercent);
+    }
+
+    Vector2 loc(Point point) {
+        float widthPercent = (float) point.x;
+        float heightPercent = (float) point.y;
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+        return new Vector2(width * widthPercent, height * heightPercent);
+    }
+
+    Point point(double x, double y) {
+        return new Point(x, y);
+    }
+
+    public void setScene(SCENETYPE sceneType) {
+//        System.out.println(guides);
+//        guides = new Array<Array>();
+//        Array<Vector2[]> newGuides = new Array<Vector2[]>();
+        switch (sceneType) {
+            case WARRIOR1:
+//                newGuide = new Vector2[]{
+//                        loc(0.2, 0.2),
+//                        loc(0.4, 0.4),
+//                        loc(0.6, 0.6),
+//                        loc(0.8, 0.8)
+//                };
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.4),
+                                point(0.6, 0.6),
+                                point(0.8, 0.8)}
+                );
+//                System.out.println(guides);
+                goodSwipes = new boolean[1];
+                break;
+            case WARRIOR2:
+//                newGuide = new Vector2[]{
+//                        loc()
+//                };
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.4),
+                                point(0.6, 0.6),
+                                point(0.8, 0.8)},
+                        new Point[]{
+                                point(0.2, 0.8),
+                                point(0.4, 0.6),
+                                point(0.6, 0.4),
+                                point(0.8, 0.2)
+                        }
+                );
+                goodSwipes = new boolean[2];
+                break;
+            case WARRIOR3:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.2),
+                                point(0.6, 0.2),
+                                point(0.8, 0.2)},
+                        new Point[]{
+                                point(0.2, 0.5),
+                                point(0.4, 0.5),
+                                point(0.6, 0.5),
+                                point(0.8, 0.5)},
+                        new Point[]{
+                                point(0.2, 0.8),
+                                point(0.4, 0.8),
+                                point(0.6, 0.8),
+                                point(0.8, 0.8)}
+                );
+                goodSwipes = new boolean[3];
+                break;
+            case ARCHER1:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.5, 0.2),
+                                point(0.25, 0.5),
+                                point(0.5, 0.8),
+                                point(0.75, 0.5),
+                                point(0.5, 0.2)}
+                );
+                goodSwipes = new boolean[1];
+                break;
+            case ARCHER2:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.2, 0.4),
+                                point(0.2, 0.6),
+                                point(0.2, 0.8)},
+                        new Point[]{
+                                point(0.5, 0.2),
+                                point(0.5, 0.4),
+                                point(0.5, 0.6),
+                                point(0.5, 0.8)},
+                        new Point[]{
+                                point(0.8, 0.2),
+                                point(0.8, 0.4),
+                                point(0.8, 0.6),
+                                point(0.8, 0.8)}
+                );
+                goodSwipes = new boolean[3];
+                break;
+            case ARCHER3:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.8, 0.5),
+                                point(0.2, 0.8)}
+                );
+                goodSwipes = new boolean[1];
+                break;
+            case MAGE1:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.4, 0.6),
+                                point(0.2, 0.5),
+                                point(0.2, 0.3),
+                                point(0.4, 0.2)},
+                        new Point[]{
+                                point(0.6, 0.8),
+                                point(0.5, 0.6),
+                                point(0.5, 0.4),
+                                point(0.5, 0.2)},
+                        new Point[]{
+                                point(0.6, 0.6),
+                                point(0.8, 0.5),
+                                point(0.8, 0.3),
+                                point(0.6, 0.2)}
+                );
+                goodSwipes = new boolean[3];
+                break;
+            case MAGE2:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.4, 0.6),
+                                point(0.2, 0.5),
+                                point(0.4, 0.3),
+                                point(0.2, 0.2)},
+                        new Point[]{
+                                point(0.6, 0.8),
+                                point(0.4, 0.6),
+                                point(0.6, 0.4),
+                                point(0.4, 0.2)},
+                        new Point[]{
+                                point(0.6, 0.6),
+                                point(0.8, 0.5),
+                                point(0.6, 0.3),
+                                point(0.8, 0.2)}
+                );
+                goodSwipes = new boolean[3];
+                break;
+            case MAGE3:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.1),
+                                point(0.3, 0.3),
+                                point(0.4, 0.5),
+                                point(0.5, 0.7),
+                                point(0.6, 0.9),
+                                point(0.7, 0.7),
+                                point(0.8, 0.5),
+                                point(0.7, 0.3),
+                                point(0.6, 0.1),
+                                point(0.5, 0.3)}
+                );
+                goodSwipes = new boolean[1];
+                break;
+        }
+//        guides.addAll(newGuide);
+//        System.out.println(guides);
+//        guides = newGuides;
+    }
+
     public void touch(boolean _isDown) {
 //        System.out.println("touch " + _isDown);
         this.isDown = _isDown;
@@ -127,9 +331,24 @@ public class SwipeGame implements Screen {
 //            System.out.println(result);
             displayText = result.toString();
             if (result.completion > 0.5 && result.accuracy > 0.5) {
-                goodDraw = true;
-            } else {
-                goodDraw = false;
+//                goodDraw = true;
+                goodSwipes[result.index] = true;
+            }
+            System.out.println("=====");
+            for (boolean goodSwipe:
+                    goodSwipes) {
+                log("" + goodSwipe);
+            }
+            boolean flag = true;
+            for (boolean goodSwipe:
+                 goodSwipes) {
+                if (!goodSwipe) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                game.setScreen(game.gamescreen);
             }
         }
     }
@@ -137,59 +356,77 @@ public class SwipeGame implements Screen {
     class CheckSwipePackage {
         double completion = 0;
         double accuracy = 0;
+        int index = 0;
 
-        public CheckSwipePackage(double _completion, double _accuracy) {
+        public CheckSwipePackage(double _completion, double _accuracy, int _index) {
             completion = _completion;
             accuracy = _accuracy;
+            index = _index;
         }
 
         public String toString() {
-            return "completion: " + completion + ", accuracy: " + accuracy;
+            return "completion: " + completion + ", accuracy: " + accuracy + ", index: " + index;
         }
     }
 
     public CheckSwipePackage checkSwipe(Array<Vector2> path) {
-        boolean[] swiped = new boolean[guide.size];
-        double[] distances = new double[guide.size];
-        for (int i = 0; i < distances.length; i++) {
-            distances[i] = -1;
-        }
+        CheckSwipePackage output = new CheckSwipePackage(0, 0, -1);
 
-        for (int i = 0; i < path.size; i++) {
-            int closestID = -1;
-            double minDist = 0;
-            for (int j = 0; j < guide.size; j++) {
-                double dist = Math.sqrt(Math.pow(path.get(i).x - guide.get(j).x, 2) + Math.pow(path.get(i).y - guide.get(j).y, 2));
-//                System.out.println(i + " : " + j + " : " + dist);
-                if (dist < maxDist && (closestID == -1 || minDist > dist)) {
-                    closestID = j;
-                    minDist = dist;
-//                    System.out.println(j + " : " + minDist);
-                }
+        for (int x = 0; x < guides.size; x++) {
+            Array<Vector2> guide = guides.get(x);
+            boolean[] swiped = new boolean[guide.size];
+            double[] distances = new double[guide.size];
+            for (int i = 0; i < distances.length; i++) {
+                distances[i] = -1;
             }
-            if (closestID != -1) {
-                if (!swiped[closestID]) {
-                    swiped[closestID] = true;
+
+            for (int i = 0; i < path.size; i++) {
+                int closestID = -1;
+                double minDist = 0;
+                for (int j = 0; j < guide.size; j++) {
+                    double dist = Math.sqrt(Math.pow(path.get(i).x - guide.get(j).x, 2) + Math.pow(path.get(i).y - guide.get(j).y, 2));
+//                System.out.println(i + " : " + j + " : " + dist);
+                    if (dist < maxDist && (closestID == -1 || minDist > dist)) {
+                        closestID = j;
+                        minDist = dist;
+//                    System.out.println(j + " : " + minDist);
+                    }
+                }
+                if (closestID != -1) {
+                    if (!swiped[closestID]) {
+                        swiped[closestID] = true;
+                    }
                     if (distances[closestID] == -1 || distances[closestID] > minDist) {
                         distances[closestID] = minDist;
                     }
                 }
+//            if (closestID != -1) {
+//                log("" + path.get(i), "" + guides.get(closestID), "" + closestID, "" + minDist);
+//            }
+            }
+
+            int numSwiped = 0;
+            double totalDist = 0;
+            for (int i = 0; i < guide.size; i++) {
+                if (swiped[i]) {
+                    numSwiped++;
+                    totalDist += distances[i]; // TODO Fix accuracy on less than 100% swipe completion
+                }
+            }
+
+            double completion = numSwiped / (double) guide.size;
+            double accuracy = (maxDist - (totalDist / guide.size)) / maxDist;
+
+//        for (double d : distances) {
+//            log("" + d);
+//        }
+
+//        CheckSwipePackage output = new CheckSwipePackage(completion, accuracy);
+            if (completion > output.completion) {
+                output = new CheckSwipePackage(completion, accuracy, x);
             }
         }
 
-        int numSwiped = 0;
-        double totalDist = 0;
-        for (int i = 0; i < guide.size; i++) {
-            if (swiped[i]) {
-                numSwiped++;
-            }
-            totalDist += distances[i];
-        }
-
-        double completion = numSwiped / (double)guide.size;
-        double accuracy = (maxDist - (totalDist / guide.size)) / maxDist;
-
-        CheckSwipePackage output = new CheckSwipePackage(completion, accuracy);
         return output;
     }
 
@@ -206,15 +443,27 @@ public class SwipeGame implements Screen {
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 //        shapes.setColor(Color.GRAY);
         shapes.setColor(Color.RED);
-        if (goodDraw) {
-            shapes.setColor(Color.GREEN);
-        }
-        for (int i=0; i<guide.size-1; i++) {
-            Vector2 p = guide.get(i);
-            Vector2 p2 = guide.get(i+1);
+//        if (goodDraw) {
+//            shapes.setColor(Color.GREEN);
+//        }
+//        System.out.println(guides.toArray().length);
+//        Vector2[][] foo = guides.toArray();
+//        System.out.println(foo[0][0]);
+//        log(guides.toString());
+        for (int j = 0; j < guides.size; j++) {
+            if (goodSwipes[j]) {
+                continue;
+            }
+            Array<Vector2> guide = guides.get(j);
+//            log(guide.toString());
+            for (int i = 0; i < guide.size - 1; i++) {
+                Vector2 p = guide.get(i);
+                Vector2 p2 = guide.get(i + 1);
 //            shapes.line(p.x, p.y, p2.x, p2.y);
-            shapes.rectLine(p, p2, 5);
+                shapes.rectLine(p, p2, 5);
+//                log("" + p, "" + p2);
 //            shapes.
+            }
         }
         shapes.end();
     }
@@ -288,5 +537,25 @@ public class SwipeGame implements Screen {
 
     @Override
     public void hide() {
+    }
+
+    public enum SCENETYPE {
+        WARRIOR1,
+        WARRIOR2,
+        WARRIOR3,
+        ARCHER1,
+        ARCHER2,
+        ARCHER3,
+        MAGE1,
+        MAGE2,
+        MAGE3
+    }
+
+    void log (String... args) {
+        String output = "";
+        for (String s : args) {
+            output += s + " : ";
+        }
+        System.out.println(output);
     }
 }
