@@ -398,4 +398,15 @@ public class GameScreen implements Screen{
         }
 
     }
+
+    public void dealDamage () {
+        int amt = 20;
+        if (slime1health > 0) {
+            slime1health -= amt;
+        } else if (slime2health > 0) {
+            slime2health -= amt;
+        } else {
+            slime3health -= amt;
+        }
+    }
 }

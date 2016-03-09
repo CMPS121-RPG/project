@@ -348,6 +348,7 @@ public class SwipeGame implements Screen {
                 }
             }
             if (flag) {
+                game.gamescreen.dealDamage();
                 game.setScreen(game.gamescreen);
             }
         }
