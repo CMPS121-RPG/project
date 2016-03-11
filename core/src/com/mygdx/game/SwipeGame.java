@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -31,6 +33,15 @@ public class SwipeGame implements Screen {
     private BitmapFont font;
     String displayText = "";
     boolean goodSwipes[] = new boolean[0];
+    double lineWidth = 5;
+    int minWidth = 15;
+    int maxWidth = 30;
+    double curTime = 0;
+    double pulseRate = 0.03;
+    boolean widthIncreasing = true;
+//    Texture backgroundimg;
+//    Sprite sprite;
+
 
     //probably wont be neccassary for the actual game
     final MyGdxGame game;
@@ -59,6 +70,14 @@ public class SwipeGame implements Screen {
         tex = new Texture("gradient.png");
         tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
+//        //set the background image
+//        backgroundimg = new Texture("menubackground1.png");
+//        backgroundimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//        TextureRegion region = new TextureRegion(backgroundimg, 0, 0, 600, 400);
+//        sprite = new Sprite(region);
+//        sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        sprite.setOrigin(0, 0);
+
         shapes = new ShapeRenderer();
         batch = new SpriteBatch();
 
@@ -73,6 +92,8 @@ public class SwipeGame implements Screen {
 //        }
         font = new BitmapFont();
         font.setColor(Color.RED);
+
+        curTime = System.currentTimeMillis();
     }
 
     @Override
@@ -86,12 +107,18 @@ public class SwipeGame implements Screen {
 //        System.out.println(swipe.input());
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         tex.bind();
+        //draws the background
+//        batch.begin();
+//        sprite.draw(batch);
+//        batch.end();
 
         //the endcap scale
 //		tris.endcap = 5f;
@@ -110,6 +137,24 @@ public class SwipeGame implements Screen {
 
         //uncomment to see debug lines
 //		drawDebug();
+        double newTime = System.currentTimeMillis();
+        double timeDif = newTime - curTime;
+        if (widthIncreasing) {
+            lineWidth += timeDif * pulseRate;
+            if (lineWidth >= maxWidth) {
+                lineWidth = maxWidth;
+                widthIncreasing = false;
+            }
+        } else {
+            lineWidth -= timeDif * pulseRate;
+            if (lineWidth <= minWidth) {
+                lineWidth = minWidth;
+                widthIncreasing = true;
+            }
+        }
+//        log("" + timeDif, "" + timeDif * pulseRate, "" + lineWidth, "" + widthIncreasing);
+        curTime = newTime;
+
         drawGoal();
 
         batch.begin();
@@ -461,7 +506,7 @@ public class SwipeGame implements Screen {
                 Vector2 p = guide.get(i);
                 Vector2 p2 = guide.get(i + 1);
 //            shapes.line(p.x, p.y, p2.x, p2.y);
-                shapes.rectLine(p, p2, 5);
+                shapes.rectLine(p, p2, (float)lineWidth);
 //                log("" + p, "" + p2);
 //            shapes.
             }
