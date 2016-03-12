@@ -13,12 +13,14 @@ public class MyGdxGame extends Game {
 	public MapScreen mapscreen;
 	public SwipeGame swipegame;
 	public GameScreen gamescreen;
+	public PauseScreen pausescreen;
 
 	@Override
 	public void create () {
 
 		introscreen = new IntroScreen(this);
 		//mapscreen = new MapScreen(this);
+		pausescreen = new PauseScreen(this);
 		swipegame = new SwipeGame(this);
 		gamescreen = new GameScreen(this);
 		startmenuscreen = new StartMenuScreen(this);

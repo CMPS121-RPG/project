@@ -230,8 +230,8 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 //TODO make this pause the game
                 pausebutton.setText("pausing");
-                game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
-                game.setScreen(game.swipegame);
+                //game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
+                game.setScreen(game.pausescreen);
             }
         });
 
