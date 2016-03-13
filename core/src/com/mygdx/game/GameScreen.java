@@ -40,8 +40,7 @@ public class GameScreen implements Screen{
     Sprite sprite;
     BitmapFont OurFont;
     //textures used
-    Texture backgroundimg, partymember1img, greenslime;
-    CharSequence currentpartymember = "warrior";
+    Texture backgroundimg, partymember1img, greenslime, health1texture, health2texture;
     //only needed for a spritesheet
     private TextureRegion[]     partymembersregion = new TextureRegion[4];
     TextButton attack1button, attack2button, attack3button, pausebutton;
@@ -59,19 +58,36 @@ public class GameScreen implements Screen{
 
     //create the party members
     final WarriorClass SwordBro = new WarriorClass();
-    int warriorhealth = SwordBro.basehealth;
+    float warriorhealth = SwordBro.basehealth;
     final ArcherClass Hippie = new ArcherClass();
-    int archerhealth = Hippie.basehealth;
+    float archerhealth = Hippie.basehealth;
     final MageClass Avatar = new MageClass();
-    int magehealth = Avatar.basehealth;
+    float magehealth = Avatar.basehealth;
 
     //create the monsters... for now 3 slimes
     final SmallMonster slime1 = new SmallMonster();
-    int slime1health = slime1.basehealth;
+    float slime1health = slime1.basehealth;
     final SmallMonster slime2 = new SmallMonster();
-    int slime2health = slime2.basehealth;
+    float slime2health = slime2.basehealth;
     final SmallMonster slime3 = new SmallMonster();
-    int slime3health = slime3.basehealth;
+    float slime3health = slime3.basehealth;
+
+
+    //TODO make it so that the enemies on screen are the ones from the map?
+    /* mapenemy1 is the value from the object that holds the enemy data in the map
+        do this 2 more times for enemies 2 and 3
+    if(getmapenemy1 == 1){
+        final SmallMonster enemy1 = new SmallMonster();
+        float enemy1health = enemy1.basehealth;
+    }
+    if(getmapenemy2 == 2){
+        final MediumMonster enemy1 = new MediumMonster();
+        float enemy1health = enemy1.basehealth;
+    }
+    if(getmapenemy3 == 3){
+        final MediumMonster enemy1 = new MediumMonster();
+        float enemy1health = enemy1.basehealth;
+    }*/
 
 
     @Override
@@ -97,6 +113,19 @@ public class GameScreen implements Screen{
         partymembersregion[2] = new TextureRegion(partymember1texture, 112, 0, 56, 56);
 
         greenslime = new Texture("GreenSlime.png");
+
+
+
+        Pixmap healthbarpixmap = new Pixmap(100, 25, Pixmap.Format.RGBA8888);
+        healthbarpixmap.setColor(Color.BLACK);
+        healthbarpixmap.fill();
+        Pixmap healthbarpixmap2 = new Pixmap(100, 25, Pixmap.Format.RGBA8888);
+        healthbarpixmap2.setColor(Color.RED);
+        healthbarpixmap2.fill();
+        health1texture = new Texture(healthbarpixmap);
+        health2texture = new Texture(healthbarpixmap2);
+
+
 
         skin = new Skin();
         // Generate a 1x1 white texture and store it in the skin named "white".
@@ -142,24 +171,23 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 warriorhealth = warriorhealth - 10;
                 if(partymemberturn == 0){
-                    //TODO go to warrior 1 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
-                    //TODO go to archer 1 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER1);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
-                    //TODO go to mage 1 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE1);
                     game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
                 }
-                //defend thing
+
+                //TODO make this go to defend scene?
+
                 if(checkiflose() == true){
                     //TODO go to lose screen
                     game.setScreen(game.startmenuscreen);
@@ -171,24 +199,23 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 archerhealth = archerhealth - 10;
                 if(partymemberturn == 0){
-                    //TODO go to warrior 2 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR2);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
-                    //TODO go to archer 2 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER2);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
-                    //TODO go to mage 2 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE2);
                     game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
                 }
-                //defend thing
+
+                //TODO make this go to defend scene?
+
                 if(checkiflose() == true){
                     //TODO go to lose screen
                     game.setScreen(game.startmenuscreen);
@@ -200,24 +227,23 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 magehealth = magehealth - 10;
                 if(partymemberturn == 0){
-                    //TODO go to warrior 3 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR3);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 1){
-                    //TODO go to archer 3 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER3);
                     game.setScreen(game.swipegame);
                 }
                 if(partymemberturn == 2){
-                    //TODO go to mage 3 attack
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE3);
                     game.setScreen(game.swipegame);
                 }
                 if(checkifwin() == true){
                     //TODO go back to the map
                 }
-                //defend thing
+
+                //TODO make this go to defend scene?
+
                 if(checkiflose() == true){
                     //TODO go to lose screen
                     game.setScreen(game.startmenuscreen);
@@ -228,9 +254,6 @@ public class GameScreen implements Screen{
         });
         pausebutton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO make this pause the game
-                pausebutton.setText("pausing");
-                //game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
                 game.setScreen(game.pausescreen);
             }
         });
@@ -246,52 +269,73 @@ public class GameScreen implements Screen{
         //draws the background
         sprite.draw(batch);
         //draws the temp sprites        //x,y , zoomed x,y
-        int x1, x2, x3;
-        x1 = 50;
-        x2 = 50;
-        x3 = 50;
-        if(partymemberturn == 0) {
-            x1 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Warrior " + warriorhealth;
-            attack1button.setText("Heroic Strike");
-            attack2button.setText("Onslaught");
-            attack3button.setText("Armor Breaker");
-        }
-        if(partymemberturn == 1){
-            x2 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Archer " + archerhealth;
-            attack1button.setText("Steady Shot");
-            attack2button.setText("Hail of Arrows");
-            attack3button.setText("Aimed Shot");
-        }
-        if(partymemberturn == 2) {
-            x3 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Avatar " + magehealth;
-            attack1button.setText("Fire");
-            attack2button.setText("Earth");
-            attack3button.setText("Water");
-        }
+        String warriorhealthstring = "Slashy " + (int)warriorhealth + "/100";
+        String magehealthstring = "Avatar " + (int)magehealth + "/50";
+        String archerhealthstring = "Woosh " + (int)archerhealth + "/75";
 
         placepartymembers();
         //draws the temp sprites        //x,y , zoomed x,y
+        OurFont.setColor(1, 1, 1, 1);
+
         if(warriorhealth > 0) {
+            float warriorhealthbar = (float)(220.0 * (warriorhealth / SwordBro.basehealth));
             batch.draw(partymembersregion[0], x1, 100, 112, 112);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 45, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 45, warriorhealthbar, 20);
+            OurFont.draw(batch, warriorhealthstring, 20, Gdx.graphics.getHeight() - 30);
         }
         if(archerhealth > 0) {
+            float archerhealthbar = (float)(220.0 * (archerhealth / 75.0));
             batch.draw(partymembersregion[1], x2, 200, 112, 112);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 350, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 350, archerhealthbar, 20);
+            OurFont.draw(batch, archerhealthstring , 20, Gdx.graphics.getHeight() - 335);
         }
         if(magehealth > 0) {
+            float magehealthbar = (float)(220.0 * (magehealth / 50.0));
             batch.draw(partymembersregion[2], x3, 300, 112, 112);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 250, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 250, magehealthbar, 20);
+            OurFont.draw(batch, magehealthstring , 20, Gdx.graphics.getHeight() - 235);
         }
 
         //draws the enemies for now, probably change this to a system like the one for party members
-        for(int i = 0; i < numberofenemies; i++) {
+        /*for(int i = 0; i < numberofenemies; i++) {
             batch.draw(greenslime, Gdx.graphics.getWidth() - 100, (100*i) + 150, 64, 64);
-        }
+        }*/
 
-        //display who's turn it is
-        OurFont.setColor(1, 1, 1, 1);
-        OurFont.draw(batch, currentpartymember , 20, Gdx.graphics.getHeight() - 30);
+        //TODO Set up this logic for the enemy types
+        /*
+        String enemy1healthstring = enemy1.name + " " + (int)enemy1health + "/" + enemy1.basehealth;
+        String enemy2healthstring = enemy2.name + " " + (int)enemy2health + "/" + enemy2.basehealth;
+        String enemy3healthstring = enemy3.name + " " + (int)enemy3health + "/" + enemy3.basehealth;
+
+        if(enemy1health > 0){
+
+            float enemy1healthbar = (float)(220.0 * (enemy1health / slime1.basehealth));
+            batch.draw(greenslime, Gdx.graphics.getWidth() - 100, 100 + 150, 64, 64);
+            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 45, 220, 20);
+            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 45, 220, 20);
+            OurFont.draw(batch, enemy1healthstring , 20, Gdx.graphics.getHeight() - 235);
+
+        }
+        if(enemy2health > 0){
+
+            float enemy2healthbar = (float)(220.0 * (enemy2health / slime2.basehealth));
+            batch.draw(greenslime, Gdx.graphics.getWidth() - 100, 200 + 150, 64, 64);
+            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 250, 220, 20);
+            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 250, 220, 20);
+            OurFont.draw(batch, enemy2healthstring , 20, Gdx.graphics.getHeight() - 235);
+        }
+        if(enemy3health > 0){
+
+            float enemy3healthbar = (float)(220.0 * (enemy3health / slime3.basehealth));
+            batch.draw(greenslime, Gdx.graphics.getWidth() - 100, 300 + 150, 64, 64);
+            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 350, 220, 20);
+            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 350, 220, 20);
+            OurFont.draw(batch, enemy3healthstring , 20, Gdx.graphics.getHeight() - 235);
+        }*/
+
 
         batch.end();
 
@@ -377,21 +421,18 @@ public class GameScreen implements Screen{
         x3 = 50;
         if(partymemberturn == 0) {
             x1 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Warrior " + warriorhealth + "/100";
             attack1button.setText("Heroic Strike");
             attack2button.setText("Onslut");
             attack3button.setText("Armor Breaker");
         }
         if(partymemberturn == 1){
             x2 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Archer " + archerhealth + "/75";
             attack1button.setText("Steady Shot");
             attack2button.setText("Hail of Arrows");
             attack3button.setText("Aimed Shot");
         }
         if(partymemberturn == 2) {
             x3 = (Gdx.graphics.getWidth()/2 - 280);
-            currentpartymember = "Avatar " + magehealth + "/50";
             attack1button.setText("Fire");
             attack2button.setText("Earth");
             attack3button.setText("Water");
@@ -399,6 +440,8 @@ public class GameScreen implements Screen{
 
     }
 
+    //TODO change this so it deals damage according to the attack used
+    //TODO also make the enemies targetable
     public void dealDamage () {
         int amt = 20;
         if (slime1health > 0) {
