@@ -422,7 +422,7 @@ public class GameScreen implements Screen{
         if(partymemberturn == 0) {
             x1 = (Gdx.graphics.getWidth()/2 - 280);
             attack1button.setText("Heroic Strike");
-            attack2button.setText("Onslut");
+            attack2button.setText("Onslaught");
             attack3button.setText("Armor Breaker");
         }
         if(partymemberturn == 1){
@@ -440,8 +440,6 @@ public class GameScreen implements Screen{
 
     }
 
-    //TODO change this so it deals damage according to the attack used
-    //TODO also make the enemies targetable
     public void dealDamage () {
         int amt = 20;
         if (slime1health > 0) {

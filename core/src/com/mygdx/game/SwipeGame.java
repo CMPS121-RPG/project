@@ -133,7 +133,7 @@ public class SwipeGame implements Screen {
         tris.color = Color.WHITE;
 
         //render the triangles to the screen
-        tris.draw(cam, isDown);
+//        tris.draw(cam, isDown);
 
         //uncomment to see debug lines
 //		drawDebug();
@@ -157,10 +157,12 @@ public class SwipeGame implements Screen {
 
         drawGoal();
 
-        batch.begin();
-        font.draw(batch, displayText, 200, 1000);
-        font.getData().setScale(4);
-        batch.end();
+        tris.draw(cam, isDown);
+
+//        batch.begin();
+//        font.draw(batch, displayText, 200, 1000);
+//        font.getData().setScale(4);
+//        batch.end();
     }
 
     class Point {
@@ -269,9 +271,13 @@ public class SwipeGame implements Screen {
                 guides = makeGuides(
                         new Point[]{
                                 point(0.5, 0.2),
+                                point(0.325, 0.35),
                                 point(0.25, 0.5),
+                                point(0.325, 0.65),
                                 point(0.5, 0.8),
+                                point(0.625, 0.7),
                                 point(0.75, 0.5),
+                                point(0.625, 0.3),
                                 point(0.5, 0.2)}
                 );
                 goodSwipes = new boolean[1];
@@ -300,7 +306,9 @@ public class SwipeGame implements Screen {
                 guides = makeGuides(
                         new Point[]{
                                 point(0.2, 0.2),
+                                point(0.5, 0.3),
                                 point(0.8, 0.5),
+                                point(0.5, 0.7),
                                 point(0.2, 0.8)}
                 );
                 goodSwipes = new boolean[1];
@@ -309,18 +317,24 @@ public class SwipeGame implements Screen {
                 guides = makeGuides(
                         new Point[]{
                                 point(0.4, 0.6),
+                                point(0.3, 0.575),
                                 point(0.2, 0.5),
                                 point(0.2, 0.3),
+                                point(0.3, 0.225),
                                 point(0.4, 0.2)},
                         new Point[]{
+                                point(0.4, 0.775),
+                                point(0.5, 0.9),
                                 point(0.6, 0.8),
                                 point(0.5, 0.6),
                                 point(0.5, 0.4),
                                 point(0.5, 0.2)},
                         new Point[]{
                                 point(0.6, 0.6),
+                                point(0.7, 0.575),
                                 point(0.8, 0.5),
                                 point(0.8, 0.3),
+                                point(0.7, 0.225),
                                 point(0.6, 0.2)}
                 );
                 goodSwipes = new boolean[3];
@@ -328,20 +342,21 @@ public class SwipeGame implements Screen {
             case MAGE2:
                 guides = makeGuides(
                         new Point[]{
+                                point(0.3, 0.8),
+                                point(0.1, 0.6),
+                                point(0.3, 0.4),
+                                point(0.1, 0.1)},
+
+                        new Point[]{
                                 point(0.4, 0.6),
-                                point(0.2, 0.5),
+                                point(0.6, 0.5),
                                 point(0.4, 0.3),
-                                point(0.2, 0.2)},
+                                point(0.6, 0.2)},
                         new Point[]{
-                                point(0.6, 0.8),
-                                point(0.4, 0.6),
-                                point(0.6, 0.4),
-                                point(0.4, 0.2)},
-                        new Point[]{
-                                point(0.6, 0.6),
-                                point(0.8, 0.5),
-                                point(0.6, 0.3),
-                                point(0.8, 0.2)}
+                                point(0.7, 0.8),
+                                point(0.9, 0.6),
+                                point(0.7, 0.4),
+                                point(0.9, 0.2)}
                 );
                 goodSwipes = new boolean[3];
                 break;
@@ -349,14 +364,14 @@ public class SwipeGame implements Screen {
                 guides = makeGuides(
                         new Point[]{
                                 point(0.2, 0.1),
-                                point(0.3, 0.3),
-                                point(0.4, 0.5),
-                                point(0.5, 0.7),
-                                point(0.6, 0.9),
-                                point(0.7, 0.7),
-                                point(0.8, 0.5),
-                                point(0.7, 0.3),
-                                point(0.6, 0.1),
+                                point(0.3, 0.4),
+                                point(0.4, 0.65),
+                                point(0.5, 0.8),
+                                point(0.6, 0.85),
+                                point(0.85, 0.7),
+                                point(0.9, 0.5),
+                                point(0.8, 0.3),
+                                point(0.6, 0.2),
                                 point(0.5, 0.3)}
                 );
                 goodSwipes = new boolean[1];
