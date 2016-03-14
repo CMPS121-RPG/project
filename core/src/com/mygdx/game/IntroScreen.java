@@ -87,7 +87,7 @@ public class IntroScreen implements Screen{
                 PlayButton.setText("Starting new game");
 
                 //TODO make this go to the map screen
-                game.setScreen(game.gamescreen);
+                game.setScreen(game.mapscreen);
 
             }
         });

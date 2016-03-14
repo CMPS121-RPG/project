@@ -34,6 +34,8 @@ displays health, party member sprites, enemy sprites, and 4 buttons:
  */
 public class GameScreen implements Screen{
 
+
+
     Skin skin;
     Stage stage;
     SpriteBatch batch;
@@ -231,7 +233,8 @@ public class GameScreen implements Screen{
                 //TODO make this pause the game
                 pausebutton.setText("pausing");
                 //game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
-                game.setScreen(game.pausescreen);
+                //game.setScreen(game.pausescreen);
+                game.setScreen(game.mapscreen);
             }
         });
 
