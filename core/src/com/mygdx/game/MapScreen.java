@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -32,6 +33,7 @@ public class MapScreen implements Screen{
 
     Random random = new Random();
 
+    Music maptheme = Gdx.audio.newMusic(Gdx.files.internal("FFoverworld.mp3"));
 
     final MyGdxGame game;
     public MapScreen(final MyGdxGame game) {
@@ -68,10 +70,14 @@ public class MapScreen implements Screen{
     TextButton Zone4a;
     TextButton Zone4b;
     TextButton Zone5;
+
     Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
+
     @Override
     public void show () {
-
+        maptheme.play();
+        maptheme.setVolume(game.state.volume);
+        maptheme.setLooping(true);
         batch = new SpriteBatch();
 
 
@@ -139,7 +145,7 @@ public class MapScreen implements Screen{
 
         //Zone3b = new TextButton()
 
-        final TextButton Returnmain = new TextButton("RETURN TO MAIN", textButtonStyle);
+    //    final TextButton Returnmain = new TextButton("RETURN TO MAIN", textButtonStyle);
 
         Zone1.setPosition(z1xpos,z1ypos);
         Zone2a.setPosition(z2axpos,z2aypos);
@@ -149,9 +155,9 @@ public class MapScreen implements Screen{
         Zone4b.setPosition(z4bxpos, z4bypos);
         Zone5.setPosition(z5xpos, z5ypos);
 
-        Returnmain.setPosition(100, 100);
+    //    Returnmain.setPosition(100, 100);
 
-        stage.addActor(Returnmain);
+    //    stage.addActor(Returnmain);
 
         stage.addActor(Zone1);
         stage.addActor(Zone2a);
@@ -177,6 +183,7 @@ public class MapScreen implements Screen{
                 game.state.difficulty = 1;
 
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
 
             }
         });
@@ -194,6 +201,7 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = random.nextInt(2) + 1;//returns an int from 1 to 2
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
 
         });
@@ -211,6 +219,7 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = random.nextInt(2) + 1;//returns int from 1 to 2
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
         });
 
@@ -228,6 +237,7 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = 2;
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
         });
 
@@ -245,6 +255,7 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = random.nextInt(2) +2; //returns an int from 2-3
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
         });
 
@@ -262,6 +273,7 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = random.nextInt(2) + 2; //returns an int from 2-3
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
         });
 
@@ -277,15 +289,16 @@ public class MapScreen implements Screen{
 
                 game.state.difficulty = 3;
                 game.setScreen(game.gamescreen);
+                maptheme.stop();
             }
         });
 
 
-        Returnmain.addListener(new ChangeListener() {
+        /*Returnmain.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor){
                 game.setScreen(game.startmenuscreen);
             }
-        });
+        });*/
     }
     @Override
     public void render (float delta) {
@@ -318,6 +331,7 @@ public class MapScreen implements Screen{
     }
     @Override
     public void dispose () {
+        select.dispose();
     }
 
 }

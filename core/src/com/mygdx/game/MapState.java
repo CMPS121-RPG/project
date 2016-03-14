@@ -21,5 +21,5 @@ public class MapState {
 
     int difficulty = 1;
 
-    float volume = 1f;
+    float volume = .7f;
 }

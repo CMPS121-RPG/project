@@ -101,6 +101,7 @@ public class GameScreen implements Screen{
     @Override
     public void show () {
         battletheme.play();
+        battletheme.setVolume(game.state.volume);
         battletheme.setLooping(true);
         batch = new SpriteBatch();
         stage = new Stage();
@@ -384,6 +385,7 @@ public class GameScreen implements Screen{
     public void dispose () {
         stage.dispose();
         skin.dispose();
+        attacksound.dispose();
     }
     public void switchpartymember(){
         if(partymemberturn == 0){

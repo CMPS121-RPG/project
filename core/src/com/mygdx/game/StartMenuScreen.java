@@ -28,7 +28,7 @@ public class StartMenuScreen implements Screen {
     SpriteBatch batch;
     Texture img;
     Sprite sprite;
-    Music battletheme = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
+    Music openingtheme = Gdx.audio.newMusic(Gdx.files.internal("FFVIIprelude.mp3"));
 
     Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
 
@@ -56,7 +56,9 @@ public class StartMenuScreen implements Screen {
     }
     @Override
     public void show () {
-        //battletheme.play();
+        openingtheme.play();
+        openingtheme.setLooping(true);
+        //openingtheme.setVolume(game.state.volume);
         batch = new SpriteBatch();
 
         stage = new Stage();
@@ -116,7 +118,7 @@ public class StartMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 select.play();
                 PlayButton.setText("Starting new game");
-
+                openingtheme.stop();
                 //this goes to the swipe thing
                 game.setScreen(game.introscreen);
 
@@ -127,6 +129,14 @@ public class StartMenuScreen implements Screen {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
                 select.play();
                 SettingsButton.setText("Muting");
+                if (game.state.volume == 0f){
+                    game.state.volume = .7f;
+                    openingtheme.play();
+                    openingtheme.setVolume(game.state.volume);
+                }else{
+                    game.state.volume = 0f;
+                    openingtheme.stop();
+                }
 
                 //TODO make this mute and unmute the non existant sound
                 //mute and unmute;
@@ -158,5 +168,6 @@ public class StartMenuScreen implements Screen {
     public void dispose () {
         stage.dispose();
         skin.dispose();
+        select.dispose();
     }
 }

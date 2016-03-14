@@ -34,11 +34,10 @@ public class IntroScreen implements Screen{
     BitmapFont OurFont;
     //CharSequence theintro = "You and your friends are lost in the forest or something deal with ";
     Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
-    Music battletheme = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
-
+    Music openingtheme = Gdx.audio.newMusic(Gdx.files.internal("FFVIIprelude.mp3"));
     @Override
     public void show () {
-
+        openingtheme.play();
         batch = new SpriteBatch();
 
         stage = new Stage();
@@ -89,7 +88,7 @@ public class IntroScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 PlayButton.setText("Starting new game");
                 select.play();
-                battletheme.stop();
+                openingtheme.stop();
                 //TODO make this go to the map screen
                 game.setScreen(game.mapscreen);
 
@@ -132,5 +131,6 @@ public class IntroScreen implements Screen{
     }
     @Override
     public void dispose () {
+        select.dispose();
     }
 }
