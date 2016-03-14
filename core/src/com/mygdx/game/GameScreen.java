@@ -16,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
+
+
 
 /*
 The main gameScreen
@@ -40,7 +44,7 @@ public class GameScreen implements Screen{
     Sprite sprite;
     BitmapFont OurFont;
     //textures used
-    Texture backgroundimg, partymember1img, greenslime, health1texture, health2texture;
+    Texture backgroundimg, partymember1img, greenslime, health1texture, health2texture, warriorsprite, archersprite, magesprite;
     //only needed for a spritesheet
     private TextureRegion[]     partymembersregion = new TextureRegion[4];
     TextButton attack1button, attack2button, attack3button, pausebutton;
@@ -105,14 +109,17 @@ public class GameScreen implements Screen{
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         sprite.setOrigin(0, 0);
 
-        partymember1img = new Texture("tempsprite.png");
-        TextureRegion partymember1texture = new TextureRegion(partymember1img);
+        //partymember1img = new Texture("tempsprite.png");
+        //TextureRegion partymember1texture = new TextureRegion(partymember1img);
         //seperate the sprites from the sprite sheat
-        partymembersregion[0] = new TextureRegion(partymember1texture, 0, 0, 56, 56);
-        partymembersregion[1] = new TextureRegion(partymember1texture, 56, 0, 56, 56);
-        partymembersregion[2] = new TextureRegion(partymember1texture, 112, 0, 56, 56);
+        //partymembersregion[0] = new TextureRegion(partymember1texture, 0, 0, 56, 56);
+        //partymembersregion[1] = new TextureRegion(partymember1texture, 56, 0, 56, 56);
+        //partymembersregion[2] = new TextureRegion(partymember1texture, 112, 0, 56, 56);
 
         greenslime = new Texture("GreenSlime.png");
+        warriorsprite = new Texture("SlashHeores Warrior.png");
+        archersprite = new Texture("SlashHeroes Archer.png");
+        magesprite = new Texture("SlashHeroesMage.png");
 
 
 
@@ -277,26 +284,27 @@ public class GameScreen implements Screen{
         //draws the temp sprites        //x,y , zoomed x,y
         OurFont.setColor(1, 1, 1, 1);
 
+
         if(warriorhealth > 0) {
             float warriorhealthbar = (float)(220.0 * (warriorhealth / SwordBro.basehealth));
-            batch.draw(partymembersregion[0], x1, 100, 112, 112);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 45, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 45, warriorhealthbar, 20);
-            OurFont.draw(batch, warriorhealthstring, 20, Gdx.graphics.getHeight() - 30);
+            batch.draw(warriorsprite, x1, 100, 128, 128);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 315, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 315, warriorhealthbar, 20);
+            OurFont.draw(batch, warriorhealthstring, 20, Gdx.graphics.getHeight() - 300);   //-15 of whatever the healthbars y is
         }
         if(archerhealth > 0) {
             float archerhealthbar = (float)(220.0 * (archerhealth / 75.0));
-            batch.draw(partymembersregion[1], x2, 200, 112, 112);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 350, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 350, archerhealthbar, 20);
-            OurFont.draw(batch, archerhealthstring , 20, Gdx.graphics.getHeight() - 335);
+            batch.draw(archersprite, x2, 240, 128, 128);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 190, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 190, archerhealthbar, 20);
+            OurFont.draw(batch, archerhealthstring , 20, Gdx.graphics.getHeight() - 175);
         }
         if(magehealth > 0) {
             float magehealthbar = (float)(220.0 * (magehealth / 50.0));
-            batch.draw(partymembersregion[2], x3, 300, 112, 112);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 250, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 250, magehealthbar, 20);
-            OurFont.draw(batch, magehealthstring , 20, Gdx.graphics.getHeight() - 235);
+            batch.draw(magesprite, x3, 370, 128, 128);
+            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 45, 220, 20);
+            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 45, magehealthbar, 20);
+            OurFont.draw(batch, magehealthstring , 20, Gdx.graphics.getHeight() - 30);
         }
 
         //draws the enemies for now, probably change this to a system like the one for party members
