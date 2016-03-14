@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -31,7 +33,8 @@ public class IntroScreen implements Screen{
     Texture img;
     BitmapFont OurFont;
     //CharSequence theintro = "You and your friends are lost in the forest or something deal with ";
-
+    Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
+    Music battletheme = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
 
     @Override
     public void show () {
@@ -85,7 +88,8 @@ public class IntroScreen implements Screen{
         PlayButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 PlayButton.setText("Starting new game");
-
+                select.play();
+                battletheme.stop();
                 //TODO make this go to the map screen
                 game.setScreen(game.mapscreen);
 

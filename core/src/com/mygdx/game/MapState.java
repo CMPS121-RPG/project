@@ -20,4 +20,6 @@ public class MapState {
     String Zone5Str = "Goal";
 
     int difficulty = 1;
+
+    float volume = 1f;
 }

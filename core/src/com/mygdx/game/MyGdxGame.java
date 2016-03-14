@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 
 //ApplicationAdapter
 //This class gets called on launch
@@ -17,7 +18,6 @@ public class MyGdxGame extends Game {
 	public GameScreen gamescreen;
 	public PauseScreen pausescreen;
 	public MapState state;
-	//public Music battlesong = newMusic("FFVbattle");
 
 
 	@Override
@@ -33,7 +33,7 @@ public class MyGdxGame extends Game {
 
 		state = new MapState();
 
-		//Music battletheme = newMusic("FFVbattle.mp3");
+		//Music battletheme = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle"));
 	}
 	@Override
 	public void resize (int width, int height) {

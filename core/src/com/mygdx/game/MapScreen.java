@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.audio.Sound;
 import java.util.Random;
 
 //displays the map
@@ -67,7 +68,7 @@ public class MapScreen implements Screen{
     TextButton Zone4a;
     TextButton Zone4b;
     TextButton Zone5;
-
+    Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
     @Override
     public void show () {
 
@@ -164,6 +165,7 @@ public class MapScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 //Zone1.setText("Here");
                 //game.state.Zone1Str = "Here";
+                select.play();
                 Zone1.setDisabled(true);
                 game.state.Zone1_disabled = true;
 
@@ -180,10 +182,8 @@ public class MapScreen implements Screen{
         });
         Zone2a.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone2a.setText("Here");
-                //game.state.Zone2aStr = "Here";
-                //game.state.Zone1Str = "";
-                //Zone1.setText("");
+
+                select.play();
                 Zone2a.setDisabled(true);
                 Zone2b.setDisabled(true);
                 game.state.Zone2a_disabled = true;
@@ -199,12 +199,7 @@ public class MapScreen implements Screen{
         });
         Zone2b.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone2b.setText("Here");
-                //Zone2a.setText("");
-
-                //game.state.Zone2bStr = "Here";
-                //game.state.Zone1Str = "";
-
+                select.play();
                 Zone2b.setDisabled(true);
                 Zone2a.setDisabled(true);
 
@@ -221,8 +216,7 @@ public class MapScreen implements Screen{
 
         Zone3.addListener (new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone3.setText("Here");
-
+                select.play();
                 Zone3.setDisabled(true);
                 game.state.Zone3_disabled = true;
 
@@ -239,7 +233,7 @@ public class MapScreen implements Screen{
 
         Zone4a.addListener (new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone4a.setText("Here");
+                select.play();
 
                 Zone4a.setDisabled(true);
                 game.state.Zone4a_disabled = true;
@@ -256,7 +250,7 @@ public class MapScreen implements Screen{
 
         Zone4b.addListener (new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone4b.setText("Here");
+                select.play();
 
                 Zone4a.setDisabled(true);
                 game.state.Zone4a_disabled = true;
@@ -273,7 +267,7 @@ public class MapScreen implements Screen{
 
         Zone5.addListener (new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                //Zone4b.setText("Here");
+                select.play();
 
                 Zone5.setDisabled(true);
                 game.state.Zone5_disabled = true;
