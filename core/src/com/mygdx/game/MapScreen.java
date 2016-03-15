@@ -42,8 +42,8 @@ public class MapScreen implements Screen{
 
     //String PlayerPos = "";
 
-    float z1xpos = Gdx.graphics.getWidth()/2 + 260;
-    float z1ypos = Gdx.graphics.getHeight()/2 - 95;
+    float z1xpos = Gdx.graphics.getWidth()/2 + 100;  //+260 orginal value
+    float z1ypos = Gdx.graphics.getHeight()/2 - 100;     //-95 original value
 
     float z2axpos = Gdx.graphics.getWidth() / 2 - 40;
     float z2aypos =  Gdx.graphics.getHeight() / 2 - 140;
@@ -190,6 +190,9 @@ public class MapScreen implements Screen{
         Zone2a.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
 
+                //get rid of old screen
+                game.gamescreen.dispose();
+
                 select.play();
                 Zone2a.setDisabled(true);
                 Zone2b.setDisabled(true);
@@ -199,7 +202,10 @@ public class MapScreen implements Screen{
                 Zone3.setDisabled(false);
                 game.state.Zone3_disabled = false;
 
-                game.state.difficulty = random.nextInt(2) + 1;//returns an int from 1 to 2
+                //game.state.difficulty = random.nextInt(2) + 1;//returns an int from 1 to 2
+                game.state.difficulty = 2;
+                //make new screen
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
@@ -218,6 +224,8 @@ public class MapScreen implements Screen{
                 game.state.Zone3_disabled = false;
 
                 game.state.difficulty = random.nextInt(2) + 1;//returns int from 1 to 2
+                game.gamescreen.dispose();
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
@@ -236,6 +244,8 @@ public class MapScreen implements Screen{
                 game.state.Zone4b_disabled = false;
 
                 game.state.difficulty = 2;
+                game.gamescreen.dispose();
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
@@ -254,6 +264,8 @@ public class MapScreen implements Screen{
                 game.state.Zone5_disabled = false;
 
                 game.state.difficulty = random.nextInt(2) +2; //returns an int from 2-3
+                game.gamescreen.dispose();
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
@@ -272,6 +284,8 @@ public class MapScreen implements Screen{
                 game.state.Zone5_disabled = false;
 
                 game.state.difficulty = random.nextInt(2) + 2; //returns an int from 2-3
+                game.gamescreen.dispose();
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
@@ -288,6 +302,8 @@ public class MapScreen implements Screen{
                 game.state.Zone1_disabled = false;
 
                 game.state.difficulty = 3;
+                game.gamescreen.dispose();
+                game.gamescreen.show();
                 game.setScreen(game.gamescreen);
                 maptheme.stop();
             }
