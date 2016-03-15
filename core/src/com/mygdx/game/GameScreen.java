@@ -1,11 +1,7 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.AudioDevice;
-import com.badlogic.gdx.audio.AudioRecorder;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -22,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
+
+
+
 
 /*
 The main gameScreen
@@ -70,6 +69,7 @@ public class GameScreen implements Screen{
     float archerhealth = Hippie.basehealth;
     final MageClass Avatar = new MageClass();
     float magehealth = Avatar.basehealth;
+
 
     //TODO make it so that the enemies on screen are the ones from the map?
     /* mapenemy1 is the value from the object that holds the enemy data in the map
@@ -215,7 +215,7 @@ public class GameScreen implements Screen{
         attack1button.setPosition(0, 0);
         attack2button.setPosition(Gdx.graphics.getWidth()/4, 0);
         attack3button.setPosition(Gdx.graphics.getWidth()/2, 0);
-        pausebutton.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 4, 0);
+        pausebutton.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/4, 0);
         stage.addActor(attack1button);
         stage.addActor(attack2button);
         stage.addActor(attack3button);
@@ -339,9 +339,6 @@ public class GameScreen implements Screen{
             }
         });
 
-//        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
-        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
-        mp3Music.play();
     }
     @Override
     public void render (float delta) {
