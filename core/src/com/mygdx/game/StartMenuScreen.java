@@ -26,7 +26,7 @@ public class StartMenuScreen implements Screen {
     Skin skin;
     Stage stage;
     SpriteBatch batch;
-    Texture img;
+    Texture img, titleimg;
     Sprite sprite;
     Music openingtheme = Gdx.audio.newMusic(Gdx.files.internal("FFVIIprelude.mp3"));
 
@@ -44,9 +44,12 @@ public class StartMenuScreen implements Screen {
         Gdx.gl.glClearColor((float) .1, (float) .1, (float) .66, (float) .8);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //this draws the background image
+        //this draws the background image and the title
         batch.begin();
         sprite.draw(batch);
+        //texture, starting x, starting y, width, height
+        //the title img is originally 128 by 32
+        batch.draw(titleimg, -50, Gdx.graphics.getHeight()/2, 1028, 256);
         batch.end();
 
         //draws the buttons
@@ -67,6 +70,7 @@ public class StartMenuScreen implements Screen {
         //change this if we ever put this game on the playstore
 //        img = new Texture("menubackground1.png");
         img = new Texture("menu_background_fix.png");
+        titleimg = new Texture("SlashHeroesTitle.png");
         img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         //change these numbers around so it looks good on the presentation phone
         TextureRegion region = new TextureRegion(img, 0, 0, 600, 400);
@@ -120,7 +124,6 @@ public class StartMenuScreen implements Screen {
                 select.play();
                 PlayButton.setText("Starting new game");
                 openingtheme.stop();
-                //this goes to the swipe thing
                 game.setScreen(game.introscreen);
 
             }
@@ -129,14 +132,15 @@ public class StartMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
                 select.play();
-                SettingsButton.setText("Muting");
                 if (game.state.volume == 0f){
                     game.state.volume = .7f;
                     openingtheme.play();
                     openingtheme.setVolume(game.state.volume);
+                    SettingsButton.setText("Mute");
                 }else{
                     game.state.volume = 0f;
                     openingtheme.stop();
+                    SettingsButton.setText("Unmute");
                 }
 
                 //TODO make this mute and unmute the non existant sound
