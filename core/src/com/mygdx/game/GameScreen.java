@@ -1,7 +1,11 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.AudioRecorder;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -18,9 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
-
-
-
 
 /*
 The main gameScreen
@@ -49,7 +50,7 @@ public class GameScreen implements Screen{
     BitmapFont OurFont;
     //textures used
     Texture backgroundimg, health1texture, health2texture, warriorsprite, archersprite, magesprite,
-        enemy1texture, enemy2texture, enemy3texture;
+            enemy1texture, enemy2texture, enemy3texture, deadplayer;
     TextButton attack1button, attack2button, attack3button, pausebutton;
     int partymemberturn;    //0: warrior 1:archer 2:mage
     int x1, x2, x3;         //positions for the party members sprites
@@ -70,22 +71,6 @@ public class GameScreen implements Screen{
     final MageClass Avatar = new MageClass();
     float magehealth = Avatar.basehealth;
 
-
-    //TODO make it so that the enemies on screen are the ones from the map?
-    /* mapenemy1 is the value from the object that holds the enemy data in the map
-        do this 2 more times for enemies 2 and 3
-    if(getmapenemy1 == 1){
-        final SmallMonster enemy1 = new SmallMonster();
-        float enemy1health = enemy1.basehealth;
-    }
-    if(getmapenemy2 == 2){
-        final MediumMonster enemy1 = new MediumMonster();
-        float enemy1health = enemy1.basehealth;
-    }
-    if(getmapenemy3 == 3){
-        final MediumMonster enemy1 = new MediumMonster();
-        float enemy1health = enemy1.basehealth;
-    }*/
     SmallMonster enemy1, enemy2, enemy3;
     MediumMonster enemy4, enemy5, enemy6;
     LargeMonster enemy7, enemy8, enemy9;
@@ -94,6 +79,8 @@ public class GameScreen implements Screen{
     String enemy1name, enemy2name, enemy3name;
     int baseenemyhealth1, baseenemyhealth2, baseenemyhealth3;
 
+    //because
+    Boolean firsttimeshow = true;
 
 
     @Override
@@ -106,56 +93,8 @@ public class GameScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
 
 
-        //select enemies based on difficulty, make this as complex or as simple as neccessary
-        if(game.state.difficulty >= 0 && game.state.difficulty < 2){
-            enemy1 = new SmallMonster();
-            enemy1health = enemy1.basehealth;
-            enemy2 = new SmallMonster();
-            enemy2health = enemy2.basehealth;
-            enemy3 = new SmallMonster();
-            enemy3health = enemy3.basehealth;
-            enemy1name = "Slime";
-            enemy2name = "Slime";
-            enemy3name = "Slime";
-            enemy1texture = new Texture("SlashHeroesSlimeGreen.png");
-            enemy2texture = new Texture("SlashHeroesSlimeRed.png");
-            enemy3texture = new Texture("SlashHeroesSlimeBlue.png");
-            baseenemyhealth1 = 20;
-            baseenemyhealth2 = 20;
-            baseenemyhealth3 = 20;
-        }else if (game.state.difficulty >= 2 || game.state.difficulty < 3){
-            enemy4 = new MediumMonster();
-            enemy1health = enemy4.basehealth;
-            enemy5 = new MediumMonster();
-            enemy2health = enemy5.basehealth;
-            enemy6 = new MediumMonster();
-            enemy3health = enemy6.basehealth;
-            enemy1name = "Frogthing";
-            enemy2name = "Frogthing";
-            enemy3name = "Frogthing";
-            enemy1texture = new Texture("SlashHeroesWullyfrog.png");
-            enemy2texture = new Texture("SlashHeroesWullyfrog.png");
-            enemy3texture = new Texture("SlashHeroesWullyfrog.png");
-            baseenemyhealth1 = 50;
-            baseenemyhealth2 = 50;
-            baseenemyhealth3 = 50;
-        }else if (game.state.difficulty <= 3){
-            enemy7 = new LargeMonster();
-            enemy1health = enemy7.basehealth;
-            enemy8 = new LargeMonster();
-            enemy2health = enemy8.basehealth;
-            enemy9 = new LargeMonster();
-            enemy3health = enemy9.basehealth;
-            enemy1name = "Cowthing";
-            enemy2name = "Cowthing";
-            enemy3name = "Cowthing";
-            enemy1texture = new Texture("SlashHeroesMinotaur.png");
-            enemy2texture = new Texture("SlashHeroesMinotaur.png");
-            enemy3texture = new Texture("SlashHeroesMinotaur.png");
-            baseenemyhealth1 = 100;
-            baseenemyhealth2 = 100;
-            baseenemyhealth3 = 100;
-        }
+        setenemystuff();
+
 
         //set the background image
         backgroundimg = new Texture("menubackground1.png");
@@ -168,6 +107,7 @@ public class GameScreen implements Screen{
         warriorsprite = new Texture("SlashHeores Warrior.png");
         archersprite = new Texture("SlashHeroes Archer.png");
         magesprite = new Texture("SlashHeroesMage.png");
+        deadplayer = new Texture("SlashHeroesGravestone.png");
 
 
 
@@ -215,7 +155,7 @@ public class GameScreen implements Screen{
         attack1button.setPosition(0, 0);
         attack2button.setPosition(Gdx.graphics.getWidth()/4, 0);
         attack3button.setPosition(Gdx.graphics.getWidth()/2, 0);
-        pausebutton.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/4, 0);
+        pausebutton.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 4, 0);
         stage.addActor(attack1button);
         stage.addActor(attack2button);
         stage.addActor(attack3button);
@@ -226,31 +166,28 @@ public class GameScreen implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 attacksound.play(.5f);
                 warriorhealth = warriorhealth - 10;
-                if(partymemberturn == 0){
+                if (partymemberturn == 0) {
                     attacknum = 1;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
                     game.setScreen(game.swipegame);
                 }
-                if(partymemberturn == 1){
+                if (partymemberturn == 1) {
                     attacknum = 4;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER1);
                     game.setScreen(game.swipegame);
                 }
-                if(partymemberturn == 2){
+                if (partymemberturn == 2) {
                     attacknum = 7;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE1);
                     game.setScreen(game.swipegame);
                 }
-                if(checkifwin() == true){
-                    //TODO go back to the map
-                    game.setScreen(game.mapscreen);
-                    battletheme.stop();//use this whenever you change back to the map screen!
-                }
-                dealDamage();
+                checkifwin();
+
                 //TODO make this go to defend scene?
 
-                if(checkiflose() == true){
+                if (checkiflose() == true) {
                     //TODO go to lose screen
+                    reset();
                     game.setScreen(game.startmenuscreen);
                 }
                 switchpartymember();
@@ -261,31 +198,28 @@ public class GameScreen implements Screen{
                 attacksound.play();
                 archerhealth = archerhealth - 10;
 
-                if(partymemberturn == 0){
+                if (partymemberturn == 0) {
                     attacknum = 2;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR2);
                     game.setScreen(game.swipegame);
                 }
-                if(partymemberturn == 1){
+                if (partymemberturn == 1) {
                     attacknum = 5;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.ARCHER2);
                     game.setScreen(game.swipegame);
                 }
-                if(partymemberturn == 2){
+                if (partymemberturn == 2) {
                     attacknum = 8;
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE2);
                     game.setScreen(game.swipegame);
                 }
-                if(checkifwin() == true){
-                    //TODO go back to the map
-                    game.setScreen(game.mapscreen);
-                    battletheme.stop();//use this whenever you change back to the map screen!
-                }
+                checkifwin();
 
                 //TODO make this go to defend scene?
 
-                if(checkiflose() == true){
+                if (checkiflose() == true) {
                     //TODO go to lose screen
+                    reset();
                     game.setScreen(game.startmenuscreen);
                 }
                 switchpartymember();
@@ -310,15 +244,12 @@ public class GameScreen implements Screen{
                     game.swipegame.setScene(SwipeGame.SCENETYPE.MAGE3);
                     game.setScreen(game.swipegame);
                 }
-                if(checkifwin() == true){
-                    //TODO go back to the map
-                    game.setScreen(game.mapscreen);
-                    battletheme.stop();//use this whenever you change back to the map screen!
-                }
+                checkifwin();
                 //TODO make this go to defend scene?
 
                 if(checkiflose() == true){
                     //TODO go to lose screen
+                    reset();
                     game.setScreen(game.startmenuscreen);
 
                 }
@@ -339,12 +270,17 @@ public class GameScreen implements Screen{
             }
         });
 
+//        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
+        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
+        mp3Music.play();
     }
     @Override
     public void render (float delta) {
         Gdx.gl.glClearColor((float) .1, (float) .1, (float) .66, (float) .8);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //the checkifwins in the buttons would need a extra button press so i put it here...
+        checkifwin();
 
         batch.begin();
         //draws the background
@@ -365,12 +301,18 @@ public class GameScreen implements Screen{
             batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 315, warriorhealthbar, 20);
             OurFont.draw(batch, warriorhealthstring, 20, Gdx.graphics.getHeight() - 300);   //-15 of whatever the healthbars y is
         }
+        if(warriorhealth <= 0){
+            batch.draw(deadplayer, 50, 100, 128, 128);
+        }
         if(archerhealth > 0) {
             float archerhealthbar = (float)(220.0 * (archerhealth / 75.0));
             batch.draw(archersprite, x2, 240, 128, 128);
             batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 190, 220, 20);
             batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 190, archerhealthbar, 20);
             OurFont.draw(batch, archerhealthstring , 20, Gdx.graphics.getHeight() - 175);
+        }
+        if(archerhealth <= 0){
+            batch.draw(deadplayer, 50, 240, 128, 128);
         }
         if(magehealth > 0) {
             float magehealthbar = (float)(220.0 * (magehealth / 50.0));
@@ -379,6 +321,9 @@ public class GameScreen implements Screen{
             batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 45, magehealthbar, 20);
             OurFont.draw(batch, magehealthstring , 20, Gdx.graphics.getHeight() - 30);
         }
+        if(magehealth <= 0){
+            batch.draw(deadplayer, 50, 370, 128, 128);
+        }
 
 
         //TODO Set up this logic for the enemy types
@@ -386,7 +331,7 @@ public class GameScreen implements Screen{
         //and im too lazy to look up how to do it online
         if(enemy1health > 0){
             String enemy1healthstring = enemy1name + " " + (int)enemy1health + "/" + baseenemyhealth1;
-            float enemy1healthbar = (float)(220.0 * (enemy1health / enemy2.basehealth));
+            float enemy1healthbar = (float)(220.0 * (enemy1health / baseenemyhealth1));
             batch.draw(enemy1texture, Gdx.graphics.getWidth() - 100, 100, 128, 128);
             batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 45, 220, 20);
             batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 45, enemy1healthbar, 20);
@@ -395,7 +340,7 @@ public class GameScreen implements Screen{
         }
         if(enemy2health > 0){
             String enemy2healthstring = enemy2name + " " + (int)enemy2health + "/" + baseenemyhealth2;
-            float enemy2healthbar = (float)(220.0 * (enemy2health / enemy2.basehealth));
+            float enemy2healthbar = (float)(220.0 * (enemy2health / baseenemyhealth2));
             batch.draw(enemy2texture, Gdx.graphics.getWidth() - 100, 240, 128, 128);
             batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 250, 220, 20);
             batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 250, enemy2healthbar, 20);
@@ -403,7 +348,7 @@ public class GameScreen implements Screen{
         }
         if(enemy3health > 0) {
             String enemy3healthstring = enemy3name + " " + (int) enemy3health + "/" + baseenemyhealth3;
-            float enemy3healthbar = (float) (220.0 * (enemy3health / enemy3.basehealth));
+            float enemy3healthbar = (float) (220.0 * (enemy3health / baseenemyhealth3));
             batch.draw(enemy3texture, Gdx.graphics.getWidth() - 100, 370, 128, 128);
             batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 350, 220, 20);
             batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 350, enemy3healthbar, 20);
@@ -480,14 +425,14 @@ public class GameScreen implements Screen{
         }
     }
 
-    public boolean checkifwin(){
-        Boolean win;
+    public void checkifwin(){
+        //Boolean win;
         if(enemy1health <= 0 && enemy2health <= 0 && enemy3health <= 0){
-            win = true;
-            return win;
+            firsttimeshow = true;
+            game.setScreen(game.mapscreen);
+            battletheme.stop();//use this whenever you change back to the map screen!
         }else{
-            win = false;
-            return win;
+            return;
         }
     }
     public void placepartymembers(){
@@ -514,22 +459,168 @@ public class GameScreen implements Screen{
         }
 
     }
+    public void reset(){
+        game.state.Zone1_disabled = false;
+        game.state.Zone2a_disabled = true;
+        game.state.Zone2b_disabled = true;
+        game.state.Zone3_disabled = true;
+        game.state.Zone4a_disabled = true;
+        game.state.Zone4b_disabled = true;
+        game.state.Zone5_disabled = true;
+        archerhealth = 75;
+        warriorhealth = 100;
+        magehealth = 50;
+        firsttimeshow = true;
+    }
 
     public void dealDamage () {
-        int amt = 10;
-        if(attacknum != 2 || attacknum != 5 || attacknum != 6 || attacknum != 8){   //single target
-            if (enemy1health > 0) {
-                //enemy1health -= amt;
-                enemy1health = enemy1health - 10;
-            } else if (enemy2health > 0) {
-                enemy2health -= amt;
-            } else {
-                enemy3health -= amt;
+        System.out.println("dealDamage Called");
+        System.out.println(attacknum);
+        System.out.println(enemy1health);
+        System.out.println(enemy2health);
+        System.out.println(enemy3health);
+
+        int damageamount;
+
+        //for now every attack deals 10 damage
+        //you can probably change the damage in swipegame
+        damageamount = 10;
+
+        if(attacknum == 1 || attacknum == 4 || attacknum == 7){ //first attack of each character
+            if(enemy1health > 0){
+                enemy1health -= 10;
+            }else if(enemy2health > 0){
+                enemy2health -= 10;
+            }else if(enemy3health > 0){
+                enemy3health -= 10;
             }
-        }else {     //if not single target then its aoe, damage values can be negative
-            enemy1health -= amt;
-            enemy2health -= amt;
-            enemy3health -= amt;
+        }else if(attacknum == 2 || attacknum == 5 || attacknum == 8 || attacknum == 9){ //these are all aoe
+            if(enemy1health > 0){
+                enemy1health -= 10;
+            }
+            if(enemy2health > 0){
+                enemy2health -= 10;
+            }
+            if(enemy3health > 0){
+                enemy3health -= 10;
+            }
+        }else if(attacknum == 3 || attacknum == 6){ //these will eventually apply debuffs, for now same single target attacks
+            if(enemy1health > 0){
+                enemy1health -= 10;
+            }else if(enemy2health > 0){
+                enemy2health -= 10;
+            }else if(enemy3health > 0){
+                enemy3health -= 10;
+            }
         }
+
+        System.out.println(enemy1health);
+        System.out.println(enemy2health);
+        System.out.println(enemy3health);
+    }
+
+    public void setenemystuff(){
+        //select enemies based on difficulty, make this as complex or as simple as neccessary
+        if(firsttimeshow == true){
+            if(game.state.difficulty >= 0 && game.state.difficulty < 2){
+                enemy1 = new SmallMonster();
+                enemy1health = enemy1.basehealth;
+                enemy2 = new SmallMonster();
+                enemy2health = enemy2.basehealth;
+                enemy3 = new SmallMonster();
+                enemy3health = enemy3.basehealth;
+                enemy1name = "Slime";
+                enemy2name = "Slime";
+                enemy3name = "Slime";
+                enemy1texture = new Texture("SlashHeroesSlimeGreen.png");
+                enemy2texture = new Texture("SlashHeroesSlimeRed.png");
+                enemy3texture = new Texture("SlashHeroesSlimeBlue.png");
+                baseenemyhealth1 = 30;
+                baseenemyhealth2 = 30;
+                baseenemyhealth3 = 30;
+                firsttimeshow = false;
+            }else if (game.state.difficulty >= 2 || game.state.difficulty < 3){
+                enemy4 = new MediumMonster();
+                enemy1health = enemy4.basehealth;
+                enemy5 = new MediumMonster();
+                enemy2health = enemy5.basehealth;
+                enemy6 = new MediumMonster();
+                enemy3health = enemy6.basehealth;
+                enemy1name = "Frogthing";
+                enemy2name = "Frogthing";
+                enemy3name = "Frogthing";
+                enemy1texture = new Texture("SlashHeroesWullyfrog.png");
+                enemy2texture = new Texture("SlashHeroesWullyfrog.png");
+                enemy3texture = new Texture("SlashHeroesWullyfrog.png");
+                baseenemyhealth1 = 50;
+                baseenemyhealth2 = 50;
+                baseenemyhealth3 = 50;
+                firsttimeshow = false;
+            }else if (game.state.difficulty <= 3){
+                enemy7 = new LargeMonster();
+                enemy1health = enemy7.basehealth;
+                enemy8 = new LargeMonster();
+                enemy2health = enemy8.basehealth;
+                enemy9 = new LargeMonster();
+                enemy3health = enemy9.basehealth;
+                enemy1name = "Cowthing";
+                enemy2name = "Cowthing";
+                enemy3name = "Cowthing";
+                enemy1texture = new Texture("SlashHeroesMinotaur.png");
+                enemy2texture = new Texture("SlashHeroesMinotaur.png");
+                enemy3texture = new Texture("SlashHeroesMinotaur.png");
+                baseenemyhealth1 = 100;
+                baseenemyhealth2 = 100;
+                baseenemyhealth3 = 100;
+                firsttimeshow = false;
+            }
+        }else if(firsttimeshow = false){
+
+            if(game.state.difficulty >= 0 && game.state.difficulty < 2){
+                enemy1 = new SmallMonster();
+                enemy2 = new SmallMonster();
+                enemy3 = new SmallMonster();
+                enemy1name = "Slime";
+                enemy2name = "Slime";
+                enemy3name = "Slime";
+                enemy1texture = new Texture("SlashHeroesSlimeGreen.png");
+                enemy2texture = new Texture("SlashHeroesSlimeRed.png");
+                enemy3texture = new Texture("SlashHeroesSlimeBlue.png");
+                baseenemyhealth1 = 30;
+                baseenemyhealth2 = 30;
+                baseenemyhealth3 = 30;
+                firsttimeshow = false;
+            }else if (game.state.difficulty >= 2 || game.state.difficulty < 3){
+                enemy4 = new MediumMonster();
+                enemy5 = new MediumMonster();
+                enemy6 = new MediumMonster();
+                enemy1name = "Frogthing";
+                enemy2name = "Frogthing";
+                enemy3name = "Frogthing";
+                enemy1texture = new Texture("SlashHeroesWullyfrog.png");
+                enemy2texture = new Texture("SlashHeroesWullyfrog.png");
+                enemy3texture = new Texture("SlashHeroesWullyfrog.png");
+                baseenemyhealth1 = 50;
+                baseenemyhealth2 = 50;
+                baseenemyhealth3 = 50;
+                firsttimeshow = false;
+            }else if (game.state.difficulty <= 3){
+                enemy7 = new LargeMonster();
+                enemy8 = new LargeMonster();
+                enemy9 = new LargeMonster();
+                enemy1name = "Cowthing";
+                enemy2name = "Cowthing";
+                enemy3name = "Cowthing";
+                enemy1texture = new Texture("SlashHeroesMinotaur.png");
+                enemy2texture = new Texture("SlashHeroesMinotaur.png");
+                enemy3texture = new Texture("SlashHeroesMinotaur.png");
+                baseenemyhealth1 = 100;
+                baseenemyhealth2 = 100;
+                baseenemyhealth3 = 100;
+                firsttimeshow = false;
+            }
+
+        }
+
     }
 }
