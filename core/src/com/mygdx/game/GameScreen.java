@@ -82,6 +82,11 @@ public class GameScreen implements Screen{
     //because
     Boolean firsttimeshow = true;
 
+    float healthBarSize = 500;
+    float healthBarHeight = 40;
+    float healthTextOffset = 30;
+    float healthLeftOffset = 35;
+
 
     @Override
     public void show () {
@@ -97,7 +102,8 @@ public class GameScreen implements Screen{
 
 
         //set the background image
-        backgroundimg = new Texture("menubackground1.png");
+//        backgroundimg = new Texture("menubackground1.png");
+        backgroundimg = new Texture("battle_background.png");
         backgroundimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         TextureRegion region = new TextureRegion(backgroundimg, 0, 0, 600, 400);
         sprite = new Sprite(region);
@@ -132,7 +138,7 @@ public class GameScreen implements Screen{
         //create the custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/slkscre.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 18;
+        parameter.size = 40;
         OurFont = generator.generateFont(parameter);
         generator.dispose();
 
@@ -184,6 +190,9 @@ public class GameScreen implements Screen{
                 checkifwin();
 
                 //TODO make this go to defend scene?
+//                attacknum = 10;
+//                game.swipegame.setScene(SwipeGame.SCENETYPE.SMALL);
+//                game.setScreen(game.swipegame);
 
                 if (checkiflose() == true) {
                     //TODO go to lose screen
@@ -217,6 +226,9 @@ public class GameScreen implements Screen{
                 checkifwin();
 
                 //TODO make this go to defend scene?
+//                attacknum = 11;
+//                game.swipegame.setScene(SwipeGame.SCENETYPE.SMALL);
+//                game.setScreen(game.swipegame);
 
                 if (checkiflose() == true) {
                     //TODO go to lose screen
@@ -248,6 +260,9 @@ public class GameScreen implements Screen{
                 }
                 checkifwin();
                 //TODO make this go to defend scene?
+//                attacknum = 12;
+//                game.swipegame.setScene(SwipeGame.SCENETYPE.SMALL);
+//                game.setScreen(game.swipegame);
 
                 if(checkiflose() == true){
                     //TODO go to lose screen
@@ -289,73 +304,78 @@ public class GameScreen implements Screen{
         //draws the background
         sprite.draw(batch);
         //draws the temp sprites        //x,y , zoomed x,y
-        String warriorhealthstring = "Slashy " + (int)warriorhealth + "/100";
-        String magehealthstring = "Avatar " + (int)magehealth + "/50";
-        String archerhealthstring = "Woosh " + (int)archerhealth + "/75";
+        String warriorhealthstring = "Warrior " + (int)warriorhealth + "/100";
+        String magehealthstring = "Mage " + (int)magehealth + "/50";
+        String archerhealthstring = "Archer " + (int)archerhealth + "/75";
 
         placepartymembers();
         //draws the temp sprites        //x,y , zoomed x,y
         OurFont.setColor(1, 1, 1, 1);
 
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+
         if(warriorhealth > 0) {
-            float warriorhealthbar = (float)(220.0 * (warriorhealth / SwordBro.basehealth));
-            batch.draw(warriorsprite, x1, 100, 128, 128);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 315, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 315, warriorhealthbar, 20);
-            OurFont.draw(batch, warriorhealthstring, 20, Gdx.graphics.getHeight() - 300);   //-15 of whatever the healthbars y is
+//            float warriorhealthbar = (float)(220.0 * (warriorhealth / SwordBro.basehealth));
+            float warriorhealthbar = (float)(healthBarSize * (warriorhealth / SwordBro.basehealth));
+            batch.draw(warriorsprite, x1, 100, 356, 356);
+//            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 315, 220, 20);
+//            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 315, warriorhealthbar, 20);
+            batch.draw(health1texture, x1 - healthLeftOffset, 450, 220, healthBarHeight);
+            batch.draw(health2texture, x1 - healthLeftOffset, 450, warriorhealthbar, healthBarHeight);
+            OurFont.draw(batch, warriorhealthstring, x1, 450 + healthTextOffset);   //-15 of whatever the healthbars y is
         }
         if(warriorhealth <= 0){
-            batch.draw(deadplayer, 50, 100, 128, 128);
+            batch.draw(deadplayer, 50, 100, 356, 356);
         }
         if(archerhealth > 0) {
-            float archerhealthbar = (float)(220.0 * (archerhealth / 75.0));
-            batch.draw(archersprite, x2, 240, 128, 128);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 190, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 190, archerhealthbar, 20);
-            OurFont.draw(batch, archerhealthstring , 20, Gdx.graphics.getHeight() - 175);
+            float archerhealthbar = (float)(healthBarSize * (archerhealth / 75.0));
+            batch.draw(archersprite, x2, 400, 356, 356);
+            batch.draw(health1texture, x2 - healthLeftOffset, 725, 220, healthBarHeight);
+            batch.draw(health2texture, x2 - healthLeftOffset, 725, archerhealthbar, healthBarHeight);
+            OurFont.draw(batch, archerhealthstring , x2, 725 + healthTextOffset);
         }
         if(archerhealth <= 0){
-            batch.draw(deadplayer, 50, 240, 128, 128);
+            batch.draw(deadplayer, 50, 400, 356, 356);
         }
         if(magehealth > 0) {
-            float magehealthbar = (float)(220.0 * (magehealth / 50.0));
-            batch.draw(magesprite, x3, 370, 128, 128);
-            batch.draw(health1texture, 20, Gdx.graphics.getHeight() - 45, 220, 20);
-            batch.draw(health2texture, 20, Gdx.graphics.getHeight() - 45, magehealthbar, 20);
-            OurFont.draw(batch, magehealthstring , 20, Gdx.graphics.getHeight() - 30);
+            float magehealthbar = (float)(healthBarSize * (magehealth / 50.0));
+            batch.draw(magesprite, x3, 720, 356, 356);
+            batch.draw(health1texture, x3 - healthLeftOffset, 1040, 220, healthBarHeight);
+            batch.draw(health2texture, x3 - healthLeftOffset, 1040, magehealthbar, healthBarHeight);
+            OurFont.draw(batch, magehealthstring , x3, 1040 + healthTextOffset);
         }
         if(magehealth <= 0){
-            batch.draw(deadplayer, 50, 370, 128, 128);
+            batch.draw(deadplayer, 50, 720, 356, 356);
         }
-
 
         //TODO Set up this logic for the enemy types
         //I am 100% there is a better way of doing this but for now it works
         //and im too lazy to look up how to do it online
         if(enemy1health > 0){
             String enemy1healthstring = enemy1name + " " + (int)enemy1health + "/" + baseenemyhealth1;
-            float enemy1healthbar = (float)(220.0 * (enemy1health / baseenemyhealth1));
-            batch.draw(enemy1texture, Gdx.graphics.getWidth() - 100, 100, 128, 128);
-            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 45, 220, 20);
-            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 45, enemy1healthbar, 20);
-            OurFont.draw(batch, enemy1healthstring , Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 30);
+            float enemy1healthbar = (float)(healthBarSize * (enemy1health / baseenemyhealth1));
+            batch.draw(enemy1texture, Gdx.graphics.getWidth() - 300, 100, 256, 256);
+            batch.draw(health1texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 350, 220, healthBarHeight);
+            batch.draw(health2texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 350, enemy1healthbar, healthBarHeight);
+            OurFont.draw(batch, enemy1healthstring , Gdx.graphics.getWidth() - 330, 350 + healthTextOffset);
 
         }
         if(enemy2health > 0){
             String enemy2healthstring = enemy2name + " " + (int)enemy2health + "/" + baseenemyhealth2;
-            float enemy2healthbar = (float)(220.0 * (enemy2health / baseenemyhealth2));
-            batch.draw(enemy2texture, Gdx.graphics.getWidth() - 100, 240, 128, 128);
-            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 250, 220, 20);
-            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 250, enemy2healthbar, 20);
-            OurFont.draw(batch, enemy2healthstring , Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 235);
+            float enemy2healthbar = (float)(healthBarSize * (enemy2health / baseenemyhealth2));
+            batch.draw(enemy2texture, Gdx.graphics.getWidth() - 300, 400, 256, 256);
+            batch.draw(health1texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 625, 220, healthBarHeight);
+            batch.draw(health2texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 625, enemy2healthbar, healthBarHeight);
+            OurFont.draw(batch, enemy2healthstring , Gdx.graphics.getWidth() - 330, 625 + healthTextOffset);
         }
         if(enemy3health > 0) {
             String enemy3healthstring = enemy3name + " " + (int) enemy3health + "/" + baseenemyhealth3;
-            float enemy3healthbar = (float) (220.0 * (enemy3health / baseenemyhealth3));
-            batch.draw(enemy3texture, Gdx.graphics.getWidth() - 100, 370, 128, 128);
-            batch.draw(health1texture, 600, Gdx.graphics.getHeight() - 350, 220, 20);
-            batch.draw(health2texture, 600, Gdx.graphics.getHeight() - 350, enemy3healthbar, 20);
-            OurFont.draw(batch, enemy3healthstring, Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 335);
+            float enemy3healthbar = (float) (healthBarSize * (enemy3health / baseenemyhealth3));
+            batch.draw(enemy3texture, Gdx.graphics.getWidth() - 300, 700, 256, 256);
+            batch.draw(health1texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 940, 220, healthBarHeight);
+            batch.draw(health2texture, Gdx.graphics.getWidth() - 300 - healthLeftOffset, 940, enemy3healthbar, healthBarHeight);
+            OurFont.draw(batch, enemy3healthstring, Gdx.graphics.getWidth() - 330, 940 + healthTextOffset);
         }
 
 
@@ -515,6 +535,12 @@ public class GameScreen implements Screen{
             }else if(enemy3health > 0){
                 enemy3health -= 10;
             }
+        } else if (attacknum == 10) { // warrior attacked
+            warriorhealth -= 10;
+        } else if (attacknum == 11) { // archer attacked
+            archerhealth -= 10;
+        } else if (attacknum == 12) { // mage attacked
+            magehealth -= 10;
         }
 
         System.out.println(enemy1health);

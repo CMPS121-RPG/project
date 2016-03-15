@@ -29,6 +29,7 @@ public class MyGdxGame extends Game {
 		gamescreen = new GameScreen(this);
 		startmenuscreen = new StartMenuScreen(this);
 		setScreen(startmenuscreen);
+//		setScreen(mapscreen);
 
 		state = new MapState();
 

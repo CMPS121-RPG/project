@@ -39,6 +39,8 @@ public class SwipeGame implements Screen {
     double curTime = 0;
     double pulseRate = 0.03;
     boolean widthIncreasing = true;
+    boolean enemyAttack = false;
+    int badSwipes = 0;
 //    Texture backgroundimg;
 //    Sprite sprite;
 
@@ -210,14 +212,10 @@ public class SwipeGame implements Screen {
 //        System.out.println(guides);
 //        guides = new Array<Array>();
 //        Array<Vector2[]> newGuides = new Array<Vector2[]>();
+        enemyAttack = false;
+        badSwipes = 0;
         switch (sceneType) {
             case WARRIOR1:
-//                newGuide = new Vector2[]{
-//                        loc(0.2, 0.2),
-//                        loc(0.4, 0.4),
-//                        loc(0.6, 0.6),
-//                        loc(0.8, 0.8)
-//                };
                 guides = makeGuides(
                         new Point[]{
                                 point(0.2, 0.2),
@@ -376,6 +374,39 @@ public class SwipeGame implements Screen {
                 );
                 goodSwipes = new boolean[1];
                 break;
+            case SMALL:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.4),
+                                point(0.6, 0.6),
+                                point(0.8, 0.8)}
+                );
+                goodSwipes = new boolean[1];
+                enemyAttack = true;
+                break;
+            case MED:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.4),
+                                point(0.6, 0.6),
+                                point(0.8, 0.8)}
+                );
+                goodSwipes = new boolean[1];
+                enemyAttack = true;
+                break;
+            case LARGE:
+                guides = makeGuides(
+                        new Point[]{
+                                point(0.2, 0.2),
+                                point(0.4, 0.4),
+                                point(0.6, 0.6),
+                                point(0.8, 0.8)}
+                );
+                goodSwipes = new boolean[1];
+                enemyAttack = true;
+                break;
         }
 //        guides.addAll(newGuide);
 //        System.out.println(guides);
@@ -390,26 +421,38 @@ public class SwipeGame implements Screen {
             CheckSwipePackage result = checkSwipe(swipe.input());
 //            System.out.println(result);
             displayText = result.toString();
-            if (result.completion > 0.5 && result.accuracy > 0.5) {
+            //TODO: give result text
+            if (result.completion > 0.6 && result.accuracy > 0.6) {
 //                goodDraw = true;
                 goodSwipes[result.index] = true;
+            } else {
+                badSwipes++;
             }
-            System.out.println("=====");
-            for (boolean goodSwipe:
-                    goodSwipes) {
-                log("" + goodSwipe);
-            }
-            boolean flag = true;
-            for (boolean goodSwipe:
-                 goodSwipes) {
-                if (!goodSwipe) {
-                    flag = false;
-                    break;
+//            System.out.println("=====");
+//            for (boolean goodSwipe:
+//                    goodSwipes) {
+//                log("" + goodSwipe);
+//            }
+            if (badSwipes >= goodSwipes.length) {
+                if (enemyAttack) { // only deal damage on enemy attack if failure
+                    game.gamescreen.dealDamage();
                 }
-            }
-            if (flag) {
-                game.gamescreen.dealDamage();
                 game.setScreen(game.gamescreen);
+            } else {
+                boolean flag = true;
+                for (boolean goodSwipe :
+                        goodSwipes) {
+                    if (!goodSwipe) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    if (!enemyAttack) { // only deal damage if a hero was attacking
+                        game.gamescreen.dealDamage();
+                    }
+                    game.setScreen(game.gamescreen);
+                }
             }
         }
     }
@@ -609,7 +652,10 @@ public class SwipeGame implements Screen {
         ARCHER3,
         MAGE1,
         MAGE2,
-        MAGE3
+        MAGE3,
+        SMALL,
+        MED,
+        LARGE
     }
 
     void log (String... args) {

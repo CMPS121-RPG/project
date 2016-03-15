@@ -42,26 +42,50 @@ public class MapScreen implements Screen{
 
     //String PlayerPos = "";
 
-    float z1xpos = Gdx.graphics.getWidth()/2 + 100;  //+260 orginal value
-    float z1ypos = Gdx.graphics.getHeight()/2 - 100;     //-95 original value
+//    float z1xpos = Gdx.graphics.getWidth()/2 + 100;  //+260 orginal value
+//    float z1ypos = Gdx.graphics.getHeight()/2 - 100;     //-95 original value
+//
+//    float z2axpos = Gdx.graphics.getWidth() / 2 - 40;
+//    float z2aypos =  Gdx.graphics.getHeight() / 2 - 140;
+//
+//    float z2bxpos = Gdx.graphics.getWidth()/2 + 300;
+//    float z2bypos = Gdx.graphics.getHeight()/2 - 300;
+//
+//    float z3xpos = Gdx.graphics.getWidth()/2 + 50;
+//    float z3ypos = Gdx.graphics.getHeight()/2 - 400;
+//
+//    float z4axpos = Gdx.graphics.getWidth()/2 - 200;
+//    float z4aypos = Gdx.graphics.getHeight()/2 - 650;
+//
+//    float z4bxpos = Gdx.graphics.getWidth()/2 - 250;
+//    float z4bypos = Gdx.graphics.getHeight()/2 - 450;
+//
+//    float z5xpos = Gdx.graphics.getWidth()/2 - 500;
+//    float z5ypos = Gdx.graphics.getHeight()/2 - 500;
 
-    float z2axpos = Gdx.graphics.getWidth() / 2 - 40;
-    float z2aypos =  Gdx.graphics.getHeight() / 2 - 140;
+    float width = Gdx.graphics.getWidth();
+    float height = Gdx.graphics.getHeight();
 
-    float z2bxpos = Gdx.graphics.getWidth()/2 + 300;
-    float z2bypos = Gdx.graphics.getHeight()/2 - 300;
+    float z1xpos = 100;
+    float z1ypos = 100;
 
-    float z3xpos = Gdx.graphics.getWidth()/2 + 50;
-    float z3ypos = Gdx.graphics.getHeight()/2 - 400;
+    float z2axpos = 500;
+    float z2aypos =  50;
 
-    float z4axpos = Gdx.graphics.getWidth()/2 - 200;
-    float z4aypos = Gdx.graphics.getHeight()/2 - 650;
+    float z2bxpos = 450;
+    float z2bypos = 250;
 
-    float z4bxpos = Gdx.graphics.getWidth()/2 - 250;
-    float z4bypos = Gdx.graphics.getHeight()/2 - 450;
+    float z3xpos = 800;
+    float z3ypos = 300;
 
-    float z5xpos = Gdx.graphics.getWidth()/2 - 500;
-    float z5ypos = Gdx.graphics.getHeight()/2 - 500;
+    float z4axpos = 1100;
+    float z4aypos = 300;
+
+    float z4bxpos = 800;
+    float z4bypos = 650;
+
+    float z5xpos = 1100;
+    float z5ypos = 900;
 
     TextButton Zone1;
     TextButton Zone2a;
@@ -86,7 +110,7 @@ public class MapScreen implements Screen{
 
         //Straight up stolen from https://www.pinterest.com/pin/428193877042769820/
         //change this if we ever put this game on the playstore
-        img = new Texture("menu_background.png");
+        img = new Texture("map_background.png");
         img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         //change these numbers around so it looks good on the presentation phone
@@ -97,7 +121,8 @@ public class MapScreen implements Screen{
 
         skin = new Skin();
         // Generate a 1x1 white texture and store it in the skin named "white".
-        Pixmap pixmap = new Pixmap(320, 75, Pixmap.Format.RGBA8888);
+//        Pixmap pixmap = new Pixmap(320, 75, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(640, 150, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fillCircle(pixmap.getWidth() / 2, pixmap.getHeight() / 2, pixmap.getHeight() / 2 - 1);
 

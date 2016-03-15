@@ -49,7 +49,12 @@ public class StartMenuScreen implements Screen {
         sprite.draw(batch);
         //texture, starting x, starting y, width, height
         //the title img is originally 128 by 32
-        batch.draw(titleimg, -50, Gdx.graphics.getHeight()/2, 1028, 256);
+//        batch.draw(titleimg, -50, Gdx.graphics.getHeight()/2, 1028, 256);
+        float titleWidth = 2056;
+        float titleHeight = 512;
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+        batch.draw(titleimg, width / 2 - titleWidth / 2, (float)(height * 0.7) - titleHeight / 2, titleWidth, titleHeight);
         batch.end();
 
         //draws the buttons
@@ -66,8 +71,7 @@ public class StartMenuScreen implements Screen {
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        //Straight up stolen from https://www.pinterest.com/pin/428193877042769820/
-        //change this if we ever put this game on the playstore
+        //Straight up stolen from https://www.pinterest.comore
 //        img = new Texture("menubackground1.png");
         img = new Texture("menu_background_fix.png");
         titleimg = new Texture("SlashHeroesTitle.png");
@@ -88,7 +92,7 @@ public class StartMenuScreen implements Screen {
         //create the custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/slkscre.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
+        parameter.size = 80;
         BitmapFont OurFont = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -110,10 +114,12 @@ public class StartMenuScreen implements Screen {
         //final TextButton ContinueButton = new TextButton("Continue",textButtonStyle);
         final TextButton SettingsButton = new TextButton("Mute",textButtonStyle);
         final TextButton QuitButton = new TextButton("Quit",textButtonStyle);
-        PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
+        PlayButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 150);
         //ContinueButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 85);
-        SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 165);
-        QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 245);
+//        SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 165);
+        SettingsButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 300);
+//        QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 245);
+        QuitButton.setPosition(Gdx.graphics.getWidth()/2 - 160, Gdx.graphics.getHeight()/2 - 450);
         stage.addActor(PlayButton);
         //stage.addActor(ContinueButton);
         stage.addActor(SettingsButton);
