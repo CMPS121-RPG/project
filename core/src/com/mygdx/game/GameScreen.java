@@ -85,9 +85,9 @@ public class GameScreen implements Screen{
 
     @Override
     public void show () {
-        battletheme.play();
+        //battletheme.play();
         battletheme.setVolume(game.state.volume);
-        battletheme.setLooping(true);
+        //battletheme.setLooping(true);
         batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -191,6 +191,7 @@ public class GameScreen implements Screen{
                     game.setScreen(game.startmenuscreen);
                 }
                 switchpartymember();
+
             }
         });
         attack2button.addListener(new ChangeListener() {
@@ -223,6 +224,7 @@ public class GameScreen implements Screen{
                     game.setScreen(game.startmenuscreen);
                 }
                 switchpartymember();
+
             }
         });
         attack3button.addListener(new ChangeListener() {
@@ -254,25 +256,26 @@ public class GameScreen implements Screen{
 
                 }
                 switchpartymember();
+
             }
 
         });
         pausebutton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 //TODO make this pause the game
-                attacksound.play();
+                //attacksound.play();
                 pausebutton.setText("pausing");
                 //game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
                 //game.setScreen(game.pausescreen);
                 game.setScreen(game.mapscreen);
-                battletheme.stop();//use this whenever you change back to the map screen!
+                //battletheme.stop();//use this whenever you change back to the map screen!
                 //game.setScreen(game.pausescreen);
             }
         });
 
-//        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
-        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
-        mp3Music.play();
+        //Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
+        //Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
+        //mp3Music.play();
     }
     @Override
     public void render (float delta) {
@@ -522,6 +525,9 @@ public class GameScreen implements Screen{
     public void setenemystuff(){
         //select enemies based on difficulty, make this as complex or as simple as neccessary
         if(firsttimeshow == true){
+            battletheme.play();
+            battletheme.setLooping(true);
+            //battletheme.setVolume(game.state.volume);
             if(game.state.difficulty >= 0 && game.state.difficulty < 2){
                 enemy1 = new SmallMonster();
                 enemy1health = enemy1.basehealth;

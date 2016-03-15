@@ -151,6 +151,7 @@ public class StartMenuScreen implements Screen {
         QuitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 select.play();
+                openingtheme.stop();
                 QuitButton.setText("Quitting");
                 //TODO make this quit the correct way
                 System.exit(0);
