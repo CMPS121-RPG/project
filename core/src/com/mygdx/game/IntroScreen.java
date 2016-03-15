@@ -62,7 +62,8 @@ public class IntroScreen implements Screen{
         //create the custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/slkscre.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
+//      Font size
+        parameter.size = 30;
         OurFont = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -104,13 +105,17 @@ public class IntroScreen implements Screen{
 
         //this draws the background image
         batch.begin();
-        //sprite.draw(batch);
+        sprite.draw(batch);
         OurFont.setColor(1, 1, 1, 1);
+        //font size is above
         //OurFont.draw(batch, theintro, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 50);
-        OurFont.draw(batch, "You and your friends are lost in the forest or something.", 20, Gdx.graphics.getHeight() - 10);
-        OurFont.draw(batch, "deal with it!", 20, Gdx.graphics.getHeight() - 50);
-        OurFont.draw(batch, "Fight some monsters and get to the end.", 20, Gdx.graphics.getHeight() - 90);
-        OurFont.draw(batch, "Or just die. Someone else can write the intro.", 20, Gdx.graphics.getHeight() - 130);
+        OurFont.draw(batch, "You and your friends are lost in the forest", 20, Gdx.graphics.getHeight() - 10);
+        OurFont.draw(batch, "or something. You must get to the end and  ", 20, Gdx.graphics.getHeight() - 50);
+        OurFont.draw(batch, "defeat the non existent boss. Select Levels ", 20, Gdx.graphics.getHeight() - 90);
+        OurFont.draw(batch, "from the map. Fight off the monsters that", 20, Gdx.graphics.getHeight() - 130);
+        OurFont.draw(batch, "live in the forests and want to eat you by  ", 20, Gdx.graphics.getHeight() - 170);
+        OurFont.draw(batch, "pressing the buttons and Slashing at them.", 20, Gdx.graphics.getHeight() - 210);
+        OurFont.draw(batch, "Try not to die, your loved ones would be sad.", 20, Gdx.graphics.getHeight() - 250);
         batch.end();
 
         //draws the buttons
