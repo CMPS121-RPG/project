@@ -23,9 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
 
-
-
-
 /*
 The main gameScreen
 displays health, party member sprites, enemy sprites, and 4 buttons:
@@ -285,7 +282,8 @@ public class GameScreen implements Screen{
             }
         });
 
-        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
+//        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("data/RideOfTheValkyries.mp3"));
+        Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
         mp3Music.play();
     }
     @Override

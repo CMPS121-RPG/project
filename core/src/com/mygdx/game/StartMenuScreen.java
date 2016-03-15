@@ -65,7 +65,8 @@ public class StartMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         //Straight up stolen from https://www.pinterest.com/pin/428193877042769820/
         //change this if we ever put this game on the playstore
-        img = new Texture("menubackground1.png");
+//        img = new Texture("menubackground1.png");
+        img = new Texture("menu_background_fix.png");
         img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         //change these numbers around so it looks good on the presentation phone
         TextureRegion region = new TextureRegion(img, 0, 0, 600, 400);

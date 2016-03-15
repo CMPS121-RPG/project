@@ -19,7 +19,6 @@ public class MyGdxGame extends Game {
 	public PauseScreen pausescreen;
 	public MapState state;
 
-
 	@Override
 	public void create () {
 
