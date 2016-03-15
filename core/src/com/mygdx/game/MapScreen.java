@@ -42,8 +42,8 @@ public class MapScreen implements Screen{
 
     //String PlayerPos = "";
 
-    float z1xpos = Gdx.graphics.getWidth()/2 + 100;  //+260 orginal value
-    float z1ypos = Gdx.graphics.getHeight()/2 - 100;     //-95 original value
+    float z1xpos = Gdx.graphics.getWidth()/2 + 260;  //+260 orginal value
+    float z1ypos = Gdx.graphics.getHeight()/2 - 95;     //-95 original value
 
     float z2axpos = Gdx.graphics.getWidth() / 2 - 40;
     float z2aypos =  Gdx.graphics.getHeight() / 2 - 140;
