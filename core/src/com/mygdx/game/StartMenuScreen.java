@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -26,11 +28,15 @@ public class StartMenuScreen implements Screen {
     SpriteBatch batch;
     Texture img;
     Sprite sprite;
+    Music openingtheme = Gdx.audio.newMusic(Gdx.files.internal("FFVIIprelude.mp3"));
+
+    Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
 
     final MyGdxGame game;
     public StartMenuScreen(final MyGdxGame game) {
         this.game = game;
     }
+
 
     @Override
     public void render (float delta) {
@@ -50,6 +56,9 @@ public class StartMenuScreen implements Screen {
     }
     @Override
     public void show () {
+        openingtheme.play();
+        openingtheme.setLooping(true);
+        //openingtheme.setVolume(game.state.volume);
         batch = new SpriteBatch();
 
         stage = new Stage();
@@ -107,8 +116,9 @@ public class StartMenuScreen implements Screen {
 
         PlayButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                select.play();
                 PlayButton.setText("Starting new game");
-
+                openingtheme.stop();
                 //this goes to the swipe thing
                 game.setScreen(game.introscreen);
 
@@ -117,7 +127,16 @@ public class StartMenuScreen implements Screen {
         SettingsButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
+                select.play();
                 SettingsButton.setText("Muting");
+                if (game.state.volume == 0f){
+                    game.state.volume = .7f;
+                    openingtheme.play();
+                    openingtheme.setVolume(game.state.volume);
+                }else{
+                    game.state.volume = 0f;
+                    openingtheme.stop();
+                }
 
                 //TODO make this mute and unmute the non existant sound
                 //mute and unmute;
@@ -126,6 +145,7 @@ public class StartMenuScreen implements Screen {
         });
         QuitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                select.play();
                 QuitButton.setText("Quitting");
                 //TODO make this quit the correct way
                 System.exit(0);
@@ -148,5 +168,6 @@ public class StartMenuScreen implements Screen {
     public void dispose () {
         stage.dispose();
         skin.dispose();
+        select.dispose();
     }
 }

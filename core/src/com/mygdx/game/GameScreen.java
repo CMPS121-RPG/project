@@ -25,6 +25,7 @@ import com.badlogic.gdx.audio.Music;
 
 
 
+
 /*
 The main gameScreen
 displays health, party member sprites, enemy sprites, and 4 buttons:
@@ -41,6 +42,9 @@ displays health, party member sprites, enemy sprites, and 4 buttons:
     if partymembers health > 0  they can attack
  */
 public class GameScreen implements Screen{
+
+    Music battletheme = Gdx.audio.newMusic(Gdx.files.internal("FFVbattle.mp3"));
+    Sound attacksound = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
 
     Skin skin;
     Stage stage;
@@ -99,7 +103,9 @@ public class GameScreen implements Screen{
 
     @Override
     public void show () {
-
+        battletheme.play();
+        battletheme.setVolume(game.state.volume);
+        battletheme.setLooping(true);
         batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -179,6 +185,7 @@ public class GameScreen implements Screen{
         //set the buttons texts to be different according to the different classes turns
         attack1button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                attacksound.play(.5f);
                 warriorhealth = warriorhealth - 10;
                 if(partymemberturn == 0){
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
@@ -207,7 +214,9 @@ public class GameScreen implements Screen{
         });
         attack2button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                attacksound.play();
                 archerhealth = archerhealth - 10;
+
                 if(partymemberturn == 0){
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR2);
                     game.setScreen(game.swipegame);
@@ -235,6 +244,7 @@ public class GameScreen implements Screen{
         });
         attack3button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                attacksound.play();
                 magehealth = magehealth - 10;
                 if(partymemberturn == 0){
                     game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR3);
@@ -264,7 +274,14 @@ public class GameScreen implements Screen{
         });
         pausebutton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.pausescreen);
+                //TODO make this pause the game
+                attacksound.play();
+                pausebutton.setText("pausing");
+                //game.swipegame.setScene(SwipeGame.SCENETYPE.WARRIOR1);
+                //game.setScreen(game.pausescreen);
+                game.setScreen(game.mapscreen);
+                battletheme.stop();//use this whenever you change back to the map screen!
+                //game.setScreen(game.pausescreen);
             }
         });
 
@@ -373,6 +390,7 @@ public class GameScreen implements Screen{
     public void dispose () {
         stage.dispose();
         skin.dispose();
+        attacksound.dispose();
     }
     public void switchpartymember(){
         if(partymemberturn == 0){

@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -31,11 +33,11 @@ public class IntroScreen implements Screen{
     Texture img;
     BitmapFont OurFont;
     //CharSequence theintro = "You and your friends are lost in the forest or something deal with ";
-
-
+    Sound select = Gdx.audio.newSound(Gdx.files.internal("select.wav"));
+    Music openingtheme = Gdx.audio.newMusic(Gdx.files.internal("FFVIIprelude.mp3"));
     @Override
     public void show () {
-
+        openingtheme.play();
         batch = new SpriteBatch();
 
         stage = new Stage();
@@ -85,9 +87,10 @@ public class IntroScreen implements Screen{
         PlayButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 PlayButton.setText("Starting new game");
-
+                select.play();
+                openingtheme.stop();
                 //TODO make this go to the map screen
-                game.setScreen(game.gamescreen);
+                game.setScreen(game.mapscreen);
 
             }
         });
@@ -128,5 +131,6 @@ public class IntroScreen implements Screen{
     }
     @Override
     public void dispose () {
+        select.dispose();
     }
 }
